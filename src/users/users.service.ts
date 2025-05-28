@@ -37,11 +37,11 @@ export class UsersService implements UsersRepository {
     return this.storage.deleteUser(id);
   }
 
-  async updateUserPasіword(id: string, password: string) {
+  async updateUserPassword(id: string, password: string) {
     const hashedPassword = await this.passwordService.hashPassword(password);
 
     return this.storage
-      .updateUserPasіword(id, hashedPassword)
+      .updateUserPassword(id, hashedPassword)
       .catch((error) => {
         if (error instanceof NotFoundException) {
           throw new NotFoundException(`User with id ${id} not found`);

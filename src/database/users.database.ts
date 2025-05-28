@@ -29,7 +29,7 @@ export class UsersDatabase implements UsersRepository {
     return Promise.resolve(this.users.delete(id));
   }
 
-  async updateUserPasіword(id: string, password: string): Promise<User | null> {
+  async updateUserPassword(id: string, password: string): Promise<User | null> {
     return this.updateUserFields(id, { password });
   }
 

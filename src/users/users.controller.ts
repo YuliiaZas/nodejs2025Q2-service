@@ -42,7 +42,7 @@ export class UsersController {
   }
 
   @Put(':id')
-  async updateUserPasіword(
+  async updateUserPassword(
     @Param() { id }: IdDto,
     @Body() updateUserDto: UpdatePasswordDto,
   ): Promise<User> {
@@ -55,7 +55,7 @@ export class UsersController {
         }
       });
 
-    return this.usersService.updateUserPasіword(id, updateUserDto.newPassword);
+    return this.usersService.updateUserPassword(id, updateUserDto.newPassword);
   }
 
   @Delete(':id')

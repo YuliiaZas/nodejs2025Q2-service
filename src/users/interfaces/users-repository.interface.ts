@@ -6,5 +6,5 @@ export interface UsersRepository {
   getUsers(): Promise<User[]>;
   getUser(id: string): Promise<User | null>;
   deleteUser(id: string): Promise<boolean>;
-  updateUserPasіword(id: string, password: string): Promise<User | null>;
+  updateUserPassword(id: string, password: string): Promise<User | null>;
 }
