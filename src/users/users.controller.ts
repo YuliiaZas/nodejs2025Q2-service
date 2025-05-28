@@ -6,7 +6,6 @@ import {
   Param,
   Delete,
   Put,
-  NotFoundException,
   ForbiddenException,
   UseInterceptors,
   ClassSerializerInterceptor,
@@ -17,6 +16,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { User } from './entities/user.entity';
 import { IdDto } from 'src/shared/dto/id.dto';
+import { UserNotFoundException } from 'src/shared/exseptions/not-found.exseptions';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('user')
@@ -36,48 +36,33 @@ export class UsersController {
   @Get(':id')
   async getUser(@Param() { id }: IdDto) {
     return this.usersService.getUser(id).then((user) => {
-      if (!user) {
-        throw new NotFoundException(`User with id ${id} not found`);
-      }
+      if (!user) throw new UserNotFoundException(id);
       return user;
     });
   }
 
   @Put(':id')
-  async updateUserPasword(
+  async updateUserPasіword(
     @Param() { id }: IdDto,
     @Body() updateUserDto: UpdatePasswordDto,
   ): Promise<User> {
-    console.log(
-      `Updating password for user with id ${id} with new password ${updateUserDto.newPassword}`,
-    );
-    return this.usersService
+    await this.usersService
       .isUserPasswordCorrect(id, updateUserDto.oldPassword)
       .then((isUserPasswordCorrect) => {
-        console.log(`isUserPasswordCorrect`, isUserPasswordCorrect);
-        if (isUserPasswordCorrect === null) {
-          throw new NotFoundException(`User with id ${id} not found`);
-        }
+        if (isUserPasswordCorrect === null) throw new UserNotFoundException(id);
         if (!isUserPasswordCorrect) {
           throw new ForbiddenException('Current password is incorrect');
         }
-      })
-      .then(() => {
-        return this.usersService.updateUserPasword(
-          id,
-          updateUserDto.newPassword,
-        );
       });
+
+    return this.usersService.updateUserPasіword(id, updateUserDto.newPassword);
   }
 
   @Delete(':id')
   @HttpCode(204)
-  async deleteUser(@Param() { id }: IdDto): Promise<string> {
+  async deleteUser(@Param() { id }: IdDto): Promise<void> {
     return this.usersService.deleteUser(id).then((isUserDeleted) => {
-      if (!isUserDeleted) {
-        throw new NotFoundException(`User with id ${id} not found`);
-      }
-      return isUserDeleted.toString();
+      if (!isUserDeleted) throw new UserNotFoundException(id);
     });
   }
 }

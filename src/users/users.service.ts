@@ -1,19 +1,25 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersRepository } from './interfaces/users-repository.interface';
 import { User } from './entities/user.entity';
 import { plainToInstance } from 'class-transformer';
+import { PasswordService } from './password.service';
 
 @Injectable()
 export class UsersService implements UsersRepository {
   constructor(
     @Inject('UsersRepository')
     private readonly storage: UsersRepository,
+    private readonly passwordService: PasswordService,
   ) {}
 
   async addUser(createUserDto: CreateUserDto) {
+    const createUserDtoWithHashedPassword = {
+      ...createUserDto,
+      password: await this.passwordService.hashPassword(createUserDto.password),
+    };
     return this.storage
-      .addUser(createUserDto)
+      .addUser(createUserDtoWithHashedPassword)
       .then((user) => plainToInstance(User, user));
   }
 
@@ -27,26 +33,30 @@ export class UsersService implements UsersRepository {
     return this.storage.getUser(id).then((user) => plainToInstance(User, user));
   }
 
-  async updateUserFields(id: string, updatedFields: Partial<User>) {
-    return this.storage
-      .updateUserFields(id, updatedFields)
-      .then((user) => plainToInstance(User, user));
-  }
-
-  async updateUserPasword(id: string, password: string) {
-    return this.storage
-      .updateUserPasword(id, password)
-      .then((user) => plainToInstance(User, user));
-  }
-
   async deleteUser(id: string) {
     return this.storage.deleteUser(id);
+  }
+
+  async updateUserPasіword(id: string, password: string) {
+    const hashedPassword = await this.passwordService.hashPassword(password);
+
+    return this.storage
+      .updateUserPasіword(id, hashedPassword)
+      .catch((error) => {
+        if (error instanceof NotFoundException) {
+          throw new NotFoundException(`User with id ${id} not found`);
+        }
+        throw error;
+      })
+      .then((user) => plainToInstance(User, user));
   }
 
   async isUserPasswordCorrect(
     id: string,
     password: string,
   ): Promise<boolean | null> {
-    return this.storage.isUserPasswordCorrect(id, password);
+    const user = await this.storage.getUser(id);
+    if (!user) return null;
+    return this.passwordService.comparePasswords(user.password, password);
   }
 }

@@ -8,16 +8,6 @@ import { UsersRepository } from 'src/users/interfaces/users-repository.interface
 export class UsersDatabase implements UsersRepository {
   private users: Map<string, User> = new Map();
 
-  private getNewUserBoilerplate(): Omit<User, keyof CreateUserDto> {
-    const currentTime = Date.now();
-    return {
-      id: randomUUID(),
-      version: 1,
-      createdAt: currentTime,
-      updatedAt: currentTime,
-    };
-  }
-
   async addUser(userParams: CreateUserDto): Promise<User> {
     const user: User = {
       ...this.getNewUserBoilerplate(),
@@ -31,7 +21,7 @@ export class UsersDatabase implements UsersRepository {
     return Promise.resolve(Array.from(this.users.values()));
   }
 
-  async getUser(id: string): Promise<User | undefined> {
+  async getUser(id: string): Promise<User | null> {
     return Promise.resolve(this.users.get(id));
   }
 
@@ -39,34 +29,35 @@ export class UsersDatabase implements UsersRepository {
     return Promise.resolve(this.users.delete(id));
   }
 
-  async updateUserFields(
-    id: string,
-    updatedFields: Partial<User>,
-  ): Promise<User> {
-    return Promise.resolve(this.users.get(id))
-      .then((user) => ({
-        ...user,
-        ...updatedFields,
-        version: user.version + 1,
-        updatedAt: Date.now(),
-      }))
-      .then(async (updatedUser) => {
-        await this.users.set(id, updatedUser);
-        return updatedUser;
-      });
-  }
-
-  async updateUserPasword(id: string, password: string): Promise<User> {
+  async updateUserPasіword(id: string, password: string): Promise<User | null> {
     return this.updateUserFields(id, { password });
   }
 
-  async isUserPasswordCorrect(
+  private async updateUserFields(
     id: string,
-    password: string,
-  ): Promise<boolean | null> {
-    return Promise.resolve(this.users.get(id)).then((user) => {
-      if (!user) return null;
-      return user.password === password;
-    });
+    updatedFields: Partial<User>,
+  ): Promise<User | null> {
+    const user = await this.users.get(id);
+    if (!user) {
+      return Promise.resolve(null);
+    }
+    const updatedUser = {
+      ...user,
+      ...updatedFields,
+      version: user.version + 1,
+      updatedAt: Date.now(),
+    };
+    await this.users.set(id, updatedUser);
+    return Promise.resolve(updatedUser);
+  }
+
+  private getNewUserBoilerplate(): Omit<User, keyof CreateUserDto> {
+    const currentTime = Date.now();
+    return {
+      id: randomUUID(),
+      version: 1,
+      createdAt: currentTime,
+      updatedAt: currentTime,
+    };
   }
 }
