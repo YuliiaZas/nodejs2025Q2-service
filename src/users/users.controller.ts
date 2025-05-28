@@ -34,7 +34,7 @@ export class UsersController {
   }
 
   @Get(':id')
-  async getUser(@Param() { id }: IdDto) {
+  async getUser(@Param() { id }: IdDto): Promise<User> {
     return this.usersService.getUser(id).then((user) => {
       if (!user) throw new UserNotFoundException(id);
       return user;
@@ -63,6 +63,7 @@ export class UsersController {
   async deleteUser(@Param() { id }: IdDto): Promise<void> {
     return this.usersService.deleteUser(id).then((isUserDeleted) => {
       if (!isUserDeleted) throw new UserNotFoundException(id);
+      return;
     });
   }
 }
