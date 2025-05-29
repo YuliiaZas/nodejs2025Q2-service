@@ -1,4 +1,4 @@
-import { Entity } from '../entity.enum';
+import { Entity } from '../types/entity.enum';
 
 export const idExample = {
   [Entity.USER]: '123e4567-e89b-12d3-a456-426614174000',

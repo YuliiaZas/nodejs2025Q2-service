@@ -1,8 +1,9 @@
 import { Type } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
-import { Entity } from '../entity.enum';
-import { getNotFoundMessage } from '../get-not-found-message';
+import { Entity } from '../types/entity.enum';
+import { getNotFoundMessage } from '../utils/get-not-found-message';
 import { getIdExample } from './examples';
+import { capitalizeFirstLetter } from '../utils/capitalize-first-letter';
 
 type ResponseType = string | Type<unknown> | [Type<unknown>];
 
@@ -27,7 +28,7 @@ export function Api400BadRequestResponse(details: string[] = []) {
 export function Api404NotFoundResponse(entity: Entity) {
   return ApiResponse({
     status: 404,
-    description: `${entity} not found. The ${entity.toLowerCase()} with the specified ID does not exist.`,
+    description: `${capitalizeFirstLetter(entity)} not found. The ${entity} with the specified ID does not exist.`,
     schema: {
       example: {
         statusCode: 404,
@@ -62,8 +63,8 @@ export function Api200OkResponse<T extends ResponseType>(
   const entityValue = unchangedEntity
     ? entity
     : Array.isArray(type)
-      ? `A list of ${entity.toLowerCase()}s`
-      : `The ${entity.toLowerCase()}`;
+      ? `A list of ${entity}s`
+      : `The ${entity}`;
   return ApiResponse({
     status: 200,
     description: `${entityValue} has been successfully ${isUpdate ? 'updated' : 'retrieved'}.`,
@@ -77,7 +78,7 @@ export function Api201CreatedResponse<T extends ResponseType>(
 ) {
   return ApiResponse({
     status: 201,
-    description: `The ${entity.toLowerCase() ?? 'data'} has been successfully created.`,
+    description: `The ${entity ?? 'data'} has been successfully created.`,
     type,
   });
 }
@@ -85,6 +86,6 @@ export function Api201CreatedResponse<T extends ResponseType>(
 export function Api204NoContentResponse(entity: string) {
   return ApiResponse({
     status: 204,
-    description: `The ${entity.toLowerCase() ?? 'data'} has been successfully deleted.`,
+    description: `The ${entity ?? 'data'} has been successfully deleted.`,
   });
 }

@@ -23,7 +23,7 @@ import {
   Api400BadRequestResponse,
   Api404NotFoundResponse,
 } from 'src/shared/swagger/responses';
-import { Entity } from 'src/shared/entity.enum';
+import { Entity } from 'src/shared/types/entity.enum';
 
 const ENTITY_NAME = Entity.ARTIST;
 

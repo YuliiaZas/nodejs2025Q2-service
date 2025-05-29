@@ -1,6 +1,6 @@
 import { ApiHideProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
-import { Entity } from 'src/shared/entity.enum';
+import { Entity } from 'src/shared/types/entity.enum';
 import { getIdExample } from 'src/shared/swagger/examples';
 
 export class User {

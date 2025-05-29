@@ -27,7 +27,7 @@ import {
   Api200OkResponse,
 } from 'src/shared/swagger/responses';
 import { ApiIdParams } from 'src/shared/swagger/params';
-import { Entity } from 'src/shared/entity.enum';
+import { Entity } from 'src/shared/types/entity.enum';
 
 const ENTITY_NAME = Entity.USER;
 
