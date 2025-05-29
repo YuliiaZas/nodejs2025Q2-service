@@ -17,13 +17,38 @@ import { UpdatePasswordDto } from './dto/update-password.dto';
 import { User } from './entities/user.entity';
 import { IdDto } from 'src/shared/dto/id.dto';
 import { UserNotFoundException } from 'src/shared/exseptions/not-found.exseptions';
-
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+@ApiTags('Users')
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('user')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
+  @ApiOperation({
+    summary: 'Create a new user',
+    description:
+      'This endpoint allows you to create a new user with a username and password.',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'The user has been successfully created.',
+    type: User,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad Request. The input data is invalid.',
+    schema: {
+      example: {
+        statusCode: 400,
+        message: [
+          'login must be longer than or equal to 3 characters',
+          'password must be longer than or equal to 4 characters',
+        ],
+        error: 'Bad Request',
+      },
+    },
+  })
   async addUser(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.usersService.addUser(createUserDto);
   }
