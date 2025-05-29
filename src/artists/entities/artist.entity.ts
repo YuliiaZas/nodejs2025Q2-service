@@ -1,13 +1,13 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 
 export class Artist {
-  @ApiProperty({ format: 'uuid' })
+  @ApiPropertyOptional({ format: 'uuid' })
   id: string;
 
-  @ApiProperty({ example: 'The Beatles' })
+  @ApiPropertyOptional({ example: 'The Beatles' })
   name: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'Specifies if the artist has a Grammy Award',
     example: false,
     type: Boolean,
