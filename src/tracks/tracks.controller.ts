@@ -12,7 +12,7 @@ import { TracksService } from './tracks.service';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 import { IdDto } from 'src/shared/dto/id.dto';
-import { TrackNotFoundException } from 'src/shared/exseptions/not-found.exseptions';
+import { AppNotFoundException } from 'src/shared/exseptions/not-found.exseptions';
 import { Track } from './entities/track.entity';
 import { ApiOperation } from '@nestjs/swagger';
 import {
@@ -23,8 +23,9 @@ import {
   Api404NotFoundResponse,
 } from 'src/shared/swagger/responses';
 import { ApiIdParams } from 'src/shared/swagger/params';
+import { Entity } from 'src/shared/entity.enum';
 
-const ENTITY_NAME = 'Track';
+const ENTITY_NAME = Entity.TRACK;
 
 @Controller('track')
 export class TracksController {
@@ -68,7 +69,7 @@ export class TracksController {
   @Api404NotFoundResponse(ENTITY_NAME)
   async getTrack(@Param() { id }: IdDto): Promise<Track> {
     return this.tracksService.getTrack(id).then((track) => {
-      if (!track) throw new TrackNotFoundException(id);
+      if (!track) throw new AppNotFoundException(id, ENTITY_NAME);
       return track;
     });
   }
@@ -88,7 +89,7 @@ export class TracksController {
     @Body() updateTrackDto: UpdateTrackDto,
   ): Promise<Track> {
     return this.tracksService.updateTrack(id, updateTrackDto).then((track) => {
-      if (!track) throw new TrackNotFoundException(id);
+      if (!track) throw new AppNotFoundException(id, ENTITY_NAME);
       return track;
     });
   }
@@ -106,7 +107,7 @@ export class TracksController {
   async deleteTrack(@Param() { id }: IdDto): Promise<void> {
     //TODO: Remove from tracks, artists
     return this.tracksService.deleteTrack(id).then((deleted) => {
-      if (!deleted) throw new TrackNotFoundException(id);
+      if (!deleted) throw new AppNotFoundException(id, ENTITY_NAME);
       return;
     });
   }

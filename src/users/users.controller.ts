@@ -16,7 +16,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { User } from './entities/user.entity';
 import { IdDto } from 'src/shared/dto/id.dto';
-import { UserNotFoundException } from 'src/shared/exseptions/not-found.exseptions';
+import { AppNotFoundException } from 'src/shared/exseptions/not-found.exseptions';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   Api400BadRequestResponse,
@@ -27,8 +27,9 @@ import {
   Api200OkResponse,
 } from 'src/shared/swagger/responses';
 import { ApiIdParams } from 'src/shared/swagger/params';
+import { Entity } from 'src/shared/entity.enum';
 
-const ENTITY_NAME = 'User';
+const ENTITY_NAME = Entity.USER;
 
 @ApiTags('Users')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -71,7 +72,7 @@ export class UsersController {
   @Api404NotFoundResponse(ENTITY_NAME)
   async getUser(@Param() { id }: IdDto): Promise<User> {
     return this.usersService.getUser(id).then((user) => {
-      if (!user) throw new UserNotFoundException(id);
+      if (!user) throw new AppNotFoundException(id, ENTITY_NAME);
       return user;
     });
   }
@@ -94,7 +95,8 @@ export class UsersController {
     await this.usersService
       .isUserPasswordCorrect(id, updateUserDto.oldPassword)
       .then((isUserPasswordCorrect) => {
-        if (isUserPasswordCorrect === null) throw new UserNotFoundException(id);
+        if (isUserPasswordCorrect === null)
+          throw new AppNotFoundException(id, ENTITY_NAME);
         if (!isUserPasswordCorrect) {
           throw new ForbiddenException('Current password is incorrect');
         }
@@ -115,7 +117,7 @@ export class UsersController {
   @Api404NotFoundResponse(ENTITY_NAME)
   async deleteUser(@Param() { id }: IdDto): Promise<void> {
     return this.usersService.deleteUser(id).then((isUserDeleted) => {
-      if (!isUserDeleted) throw new UserNotFoundException(id);
+      if (!isUserDeleted) throw new AppNotFoundException(id, ENTITY_NAME);
       return;
     });
   }

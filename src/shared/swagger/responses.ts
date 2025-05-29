@@ -1,5 +1,8 @@
 import { Type } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
+import { Entity } from '../entity.enum';
+import { getNotFoundMessage } from '../get-not-found-message';
+import { getIdExample } from './examples';
 
 type ResponseType = string | Type<unknown> | [Type<unknown>];
 
@@ -21,14 +24,14 @@ export function Api400BadRequestResponse(details: string[] = []) {
   });
 }
 
-export function Api404NotFoundResponse(entity: string, idExample?: string) {
+export function Api404NotFoundResponse(entity: Entity) {
   return ApiResponse({
     status: 404,
     description: `${entity} not found. The ${entity.toLowerCase()} with the specified ID does not exist.`,
     schema: {
       example: {
         statusCode: 404,
-        message: `${entity} with ID ${idExample ?? '123e4567-e89b-12d3-a456-426614174000'} not found`,
+        message: getNotFoundMessage(getIdExample(entity), entity),
         error: 'Not Found',
       },
     },

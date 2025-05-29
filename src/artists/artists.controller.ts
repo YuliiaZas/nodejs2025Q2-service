@@ -12,7 +12,7 @@ import { ArtistsService } from './artists.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
 import { IdDto } from 'src/shared/dto/id.dto';
-import { ArtistNotFoundException } from 'src/shared/exseptions/not-found.exseptions';
+import { AppNotFoundException } from 'src/shared/exseptions/not-found.exseptions';
 import { Artist } from './entities/artist.entity';
 import { ApiOperation } from '@nestjs/swagger';
 import { ApiIdParams } from 'src/shared/swagger/params';
@@ -23,8 +23,9 @@ import {
   Api400BadRequestResponse,
   Api404NotFoundResponse,
 } from 'src/shared/swagger/responses';
+import { Entity } from 'src/shared/entity.enum';
 
-const ENTITY_NAME = 'Artist';
+const ENTITY_NAME = Entity.ARTIST;
 
 @Controller('artist')
 export class ArtistsController {
@@ -66,7 +67,7 @@ export class ArtistsController {
   @Api404NotFoundResponse(ENTITY_NAME)
   async getArtist(@Param() { id }: IdDto): Promise<Artist> {
     return this.artistsService.getArtist(id).then((artist) => {
-      if (!artist) throw new ArtistNotFoundException(id);
+      if (!artist) throw new AppNotFoundException(id, ENTITY_NAME);
       return artist;
     });
   }
@@ -77,7 +78,6 @@ export class ArtistsController {
     description: 'This endpoint updates an artist by their ID with new data.',
   })
   @ApiIdParams(ENTITY_NAME)
-  // @ApiBody({ type: UpdateArtistDto })
   @Api200OkResponse('The user password', Artist, false, true)
   @Api400BadRequestResponse()
   @Api404NotFoundResponse(ENTITY_NAME)
@@ -88,7 +88,7 @@ export class ArtistsController {
     return this.artistsService
       .updateArtist(id, updateArtistDto)
       .then((artist) => {
-        if (!artist) throw new ArtistNotFoundException(id);
+        if (!artist) throw new AppNotFoundException(id, ENTITY_NAME);
         return artist;
       });
   }
@@ -106,7 +106,7 @@ export class ArtistsController {
   async deleteArtist(@Param() { id }: IdDto): Promise<void> {
     //TODO: Remove from tracks, albums
     return this.artistsService.deleteArtist(id).then((deleted) => {
-      if (!deleted) throw new ArtistNotFoundException(id);
+      if (!deleted) throw new AppNotFoundException(id, ENTITY_NAME);
       return;
     });
   }

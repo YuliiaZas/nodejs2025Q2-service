@@ -1,9 +1,11 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
+import { Entity } from 'src/shared/entity.enum';
+import { getIdExample } from 'src/shared/swagger/examples';
 
 export class Track {
   @ApiPropertyOptional({
     format: 'uuid',
-    example: '123e4567-e89b-12d3-a456-426614174000',
+    example: getIdExample(Entity.TRACK),
   })
   id: string;
 
@@ -18,6 +20,7 @@ export class Track {
     nullable: true,
     type: String,
     format: 'uuid',
+    example: getIdExample(Entity.ARTIST),
   })
   artistId: string | null;
 
@@ -26,6 +29,7 @@ export class Track {
     nullable: true,
     type: String,
     format: 'uuid',
+    example: getIdExample(Entity.ALBUM),
   })
   albumId: string | null;
 }

@@ -1,31 +1,9 @@
 import { NotFoundException } from '@nestjs/common';
+import { getNotFoundMessage } from '../get-not-found-message';
+import { Entity } from '../entity.enum';
 
 export class AppNotFoundException extends NotFoundException {
-  constructor(id: string, entity: string) {
-    super(`${entity} with ID ${id} not found`);
-  }
-}
-
-export class UserNotFoundException extends AppNotFoundException {
-  constructor(id: string) {
-    super(id, 'User');
-  }
-}
-
-export class ArtistNotFoundException extends AppNotFoundException {
-  constructor(id: string) {
-    super(id, 'Artist');
-  }
-}
-
-export class AlbumNotFoundException extends AppNotFoundException {
-  constructor(id: string) {
-    super(id, 'Album');
-  }
-}
-
-export class TrackNotFoundException extends AppNotFoundException {
-  constructor(id: string) {
-    super(id, 'Track');
+  constructor(id: string, entity: Entity) {
+    super(getNotFoundMessage(id, entity));
   }
 }

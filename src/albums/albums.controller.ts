@@ -12,7 +12,7 @@ import { AlbumsService } from './albums.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { IdDto } from 'src/shared/dto/id.dto';
-import { AlbumNotFoundException } from 'src/shared/exseptions/not-found.exseptions';
+import { AppNotFoundException } from 'src/shared/exseptions/not-found.exseptions';
 import { Album } from './entities/album.entity';
 import { ApiOperation } from '@nestjs/swagger';
 import {
@@ -23,8 +23,9 @@ import {
   Api404NotFoundResponse,
 } from 'src/shared/swagger/responses';
 import { ApiIdParams } from 'src/shared/swagger/params';
+import { Entity } from 'src/shared/entity.enum';
 
-const ENTITY_NAME = 'Album';
+const ENTITY_NAME = Entity.ALBUM;
 
 @Controller('album')
 export class AlbumsController {
@@ -68,7 +69,7 @@ export class AlbumsController {
   @Api404NotFoundResponse(ENTITY_NAME)
   async getAlbum(@Param() { id }: IdDto): Promise<Album> {
     return this.albumsService.getAlbum(id).then((album) => {
-      if (!album) throw new AlbumNotFoundException(id);
+      if (!album) throw new AppNotFoundException(id, ENTITY_NAME);
       return album;
     });
   }
@@ -88,7 +89,7 @@ export class AlbumsController {
     @Body() updateAlbumDto: UpdateAlbumDto,
   ): Promise<Album> {
     return this.albumsService.updateAlbum(id, updateAlbumDto).then((album) => {
-      if (!album) throw new AlbumNotFoundException(id);
+      if (!album) throw new AppNotFoundException(id, ENTITY_NAME);
       return album;
     });
   }
@@ -106,7 +107,7 @@ export class AlbumsController {
   async deleteAlbum(@Param() { id }: IdDto): Promise<void> {
     //TODO: Remove from tracks, artists
     return this.albumsService.deleteAlbum(id).then((deleted) => {
-      if (!deleted) throw new AlbumNotFoundException(id);
+      if (!deleted) throw new AppNotFoundException(id, ENTITY_NAME);
       return;
     });
   }
