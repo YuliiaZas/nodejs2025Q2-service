@@ -12,5 +12,6 @@ import { AlbumsDatabase } from 'src/database/albums.database';
       useClass: AlbumsDatabase,
     },
   ],
+  exports: [AlbumsService],
 })
 export class AlbumsModule {}

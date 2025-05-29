@@ -1,3 +1,4 @@
+import { GetEntitiesByIdsType } from 'src/shared/types/get-entities-by-ids.type';
 import { CreateTrackDto } from '../dto/create-track.dto';
 import { Track } from '../entities/track.entity';
 
@@ -10,4 +11,5 @@ export interface TracksRepository {
     id: string,
     updatedFields: Partial<Track>,
   ): Promise<Track | null>;
+  getTracksByIds(ids: string[]): Promise<GetEntitiesByIdsType<Track>>;
 }

@@ -1,3 +1,4 @@
+import { GetEntitiesByIdsType } from 'src/shared/types/get-entities-by-ids.type';
 import { CreateArtistDto } from '../dto/create-artist.dto';
 import { Artist } from '../entities/artist.entity';
 
@@ -10,4 +11,5 @@ export interface ArtistsRepository {
     id: string,
     updatedFields: Partial<Artist>,
   ): Promise<Artist | null>;
+  getArtistsByIds(ids: string[]): Promise<GetEntitiesByIdsType<Artist>>;
 }

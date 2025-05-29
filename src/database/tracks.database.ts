@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
+import { GetEntitiesByIdsType } from 'src/shared/types/get-entities-by-ids.type';
 import { CreateTrackDto } from 'src/tracks/dto/create-track.dto';
 import { Track } from 'src/tracks/entities/track.entity';
 import { TracksRepository } from 'src/tracks/interfaces/tracks-repository.interface';
@@ -43,5 +44,23 @@ export class TracksDatabase implements TracksRepository {
     };
     await this.tracks.set(id, updatedTrack);
     return Promise.resolve(updatedTrack);
+  }
+
+  async getTracksByIds(ids: string[]): Promise<GetEntitiesByIdsType<Track>> {
+    const result: GetEntitiesByIdsType<Track> = {
+      items: [],
+      notFoundIds: [],
+    };
+
+    ids.forEach((id) => {
+      const track = this.tracks.get(id);
+      if (track) {
+        result.items.push(track);
+      } else {
+        result.notFoundIds.push(id);
+      }
+    });
+
+    return Promise.resolve(result);
   }
 }

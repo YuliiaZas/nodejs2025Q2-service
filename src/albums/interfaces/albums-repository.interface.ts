@@ -1,3 +1,4 @@
+import { GetEntitiesByIdsType } from 'src/shared/types/get-entities-by-ids.type';
 import { CreateAlbumDto } from '../dto/create-album.dto';
 import { Album } from '../entities/album.entity';
 
@@ -10,4 +11,5 @@ export interface AlbumsRepository {
     id: string,
     updatedFields: Partial<Album>,
   ): Promise<Album | null>;
+  getAlbumsByIds(ids: string[]): Promise<GetEntitiesByIdsType<Album>>;
 }

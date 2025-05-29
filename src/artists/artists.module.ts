@@ -12,5 +12,6 @@ import { ArtistsDatabase } from 'src/database/artists.database';
       useClass: ArtistsDatabase,
     },
   ],
+  exports: [ArtistsService],
 })
 export class ArtistsModule {}

@@ -3,6 +3,7 @@ import { randomUUID } from 'node:crypto';
 import { CreateArtistDto } from 'src/artists/dto/create-artist.dto';
 import { Artist } from 'src/artists/entities/artist.entity';
 import { ArtistsRepository } from 'src/artists/interfaces/artists-repository.interface';
+import { GetEntitiesByIdsType } from 'src/shared/types/get-entities-by-ids.type';
 
 @Injectable()
 export class ArtistsDatabase implements ArtistsRepository {
@@ -43,5 +44,23 @@ export class ArtistsDatabase implements ArtistsRepository {
     };
     await this.artists.set(id, updatedArtist);
     return Promise.resolve(updatedArtist);
+  }
+
+  async getArtistsByIds(ids: string[]): Promise<GetEntitiesByIdsType<Artist>> {
+    const result: GetEntitiesByIdsType<Artist> = {
+      items: [],
+      notFoundIds: [],
+    };
+
+    ids.forEach((id) => {
+      const artist = this.artists.get(id);
+      if (artist) {
+        result.items.push(artist);
+      } else {
+        result.notFoundIds.push(id);
+      }
+    });
+
+    return Promise.resolve(result);
   }
 }
