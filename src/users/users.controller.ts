@@ -17,7 +17,19 @@ import { UpdatePasswordDto } from './dto/update-password.dto';
 import { User } from './entities/user.entity';
 import { IdDto } from 'src/shared/dto/id.dto';
 import { UserNotFoundException } from 'src/shared/exseptions/not-found.exseptions';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  Api400BadRequestResponse,
+  Api201CreatedResponse,
+  Api403ForbiddenResponse,
+  Api204NoContentResponse,
+  Api404NotFoundResponse,
+  Api200OkResponse,
+} from 'src/shared/swagger/responses';
+import { ApiIdParams } from 'src/shared/swagger/params';
+
+const ENTITY_NAME = 'User';
+
 @ApiTags('Users')
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('user')
@@ -28,27 +40,13 @@ export class UsersController {
   @ApiOperation({
     summary: 'Create a new user',
     description:
-      'This endpoint allows you to create a new user with a username and password.',
+      'This endpoint allows to create a new user with a login and password.',
   })
-  @ApiResponse({
-    status: 201,
-    description: 'The user has been successfully created.',
-    type: User,
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Bad Request. The input data is invalid.',
-    schema: {
-      example: {
-        statusCode: 400,
-        message: [
-          'login must be longer than or equal to 3 characters',
-          'password must be longer than or equal to 4 characters',
-        ],
-        error: 'Bad Request',
-      },
-    },
-  })
+  @Api201CreatedResponse(ENTITY_NAME, User)
+  @Api400BadRequestResponse([
+    'login must be longer than or equal to 3 characters',
+    'password must be longer than or equal to 4 characters',
+  ])
   async addUser(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.usersService.addUser(createUserDto);
   }
@@ -58,11 +56,7 @@ export class UsersController {
     summary: 'Get all users',
     description: 'This endpoint retrieves a list of all users.',
   })
-  @ApiResponse({
-    status: 200,
-    description: 'A list of users has been successfully retrieved.',
-    type: [User],
-  })
+  @Api200OkResponse(ENTITY_NAME, [User])
   async getUsers(): Promise<User[]> {
     return this.usersService.getUsers();
   }
@@ -72,34 +66,10 @@ export class UsersController {
     summary: 'Get a user by ID',
     description: 'This endpoint retrieves a user by their ID.',
   })
-  @ApiResponse({
-    status: 200,
-    description: 'The user has been successfully retrieved.',
-    type: User,
-  })
-  @ApiResponse({
-    status: 404,
-    description:
-      'User not found. The user with the specified ID does not exist.',
-    schema: {
-      example: {
-        statusCode: 404,
-        message: 'User with ID 123e4567-e89b-12d3-a456-426614174000 not found',
-        error: 'Not Found',
-      },
-    },
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Bad Request. The input ID is invalid.',
-    schema: {
-      example: {
-        statusCode: 400,
-        message: 'Invalid ID format. Must be a UUID v4',
-        error: 'Bad Request',
-      },
-    },
-  })
+  @ApiIdParams(ENTITY_NAME)
+  @Api200OkResponse(ENTITY_NAME, User)
+  @Api400BadRequestResponse()
+  @Api404NotFoundResponse(ENTITY_NAME)
   async getUser(@Param() { id }: IdDto): Promise<User> {
     return this.usersService.getUser(id).then((user) => {
       if (!user) throw new UserNotFoundException(id);
@@ -111,50 +81,13 @@ export class UsersController {
   @ApiOperation({
     summary: 'Update user password',
     description:
-      'This endpoint allows you to update the password of an existing user. The old password must be provided for verification.',
+      'This endpoint allows to update the password of an existing user. The old password must be provided for verification.',
   })
-  @ApiResponse({
-    status: 200,
-    description: 'The user password has been successfully updated.',
-    type: User,
-  })
-  @ApiResponse({
-    status: 403,
-    description: 'Forbidden. The current password is incorrect.',
-    schema: {
-      example: {
-        statusCode: 403,
-        message: 'Current password is incorrect',
-        error: 'Forbidden',
-      },
-    },
-  })
-  @ApiResponse({
-    status: 404,
-    description:
-      'User not found. The user with the specified ID does not exist.',
-    schema: {
-      example: {
-        statusCode: 404,
-        message: 'User with ID 123e4567-e89b-12d3-a456-426614174000 not found',
-        error: 'Not Found',
-      },
-    },
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Bad Request. The input data is invalid.',
-    schema: {
-      example: {
-        statusCode: 400,
-        message: [
-          'oldPassword should not be empty',
-          'newPassword must be longer than or equal to 4 characters',
-        ],
-        error: 'Bad Request',
-      },
-    },
-  })
+  @ApiIdParams(ENTITY_NAME)
+  @Api200OkResponse('The user password', User, true, true)
+  @Api400BadRequestResponse()
+  @Api403ForbiddenResponse('Current password is incorrect')
+  @Api404NotFoundResponse(ENTITY_NAME)
   async updateUserPassword(
     @Param() { id }: IdDto,
     @Body() updateUserDto: UpdatePasswordDto,
@@ -172,38 +105,15 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @HttpCode(204)
   @ApiOperation({
     summary: 'Delete a user by ID',
     description: 'This endpoint deletes a user by their ID.',
   })
-  @ApiResponse({
-    status: 204,
-    description: 'The user has been successfully deleted.',
-  })
-  @ApiResponse({
-    status: 404,
-    description:
-      'User not found. The user with the specified ID does not exist.',
-    schema: {
-      example: {
-        statusCode: 404,
-        message: 'User with ID 123e4567-e89b-12d3-a456-426614174000 not found',
-        error: 'Not Found',
-      },
-    },
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Bad Request. The input ID is invalid.',
-    schema: {
-      example: {
-        statusCode: 400,
-        message: 'Invalid ID format. Must be a UUID v4',
-        error: 'Bad Request',
-      },
-    },
-  })
-  @HttpCode(204)
+  @ApiIdParams(ENTITY_NAME)
+  @Api204NoContentResponse(ENTITY_NAME)
+  @Api400BadRequestResponse()
+  @Api404NotFoundResponse(ENTITY_NAME)
   async deleteUser(@Param() { id }: IdDto): Promise<void> {
     return this.usersService.deleteUser(id).then((isUserDeleted) => {
       if (!isUserDeleted) throw new UserNotFoundException(id);
