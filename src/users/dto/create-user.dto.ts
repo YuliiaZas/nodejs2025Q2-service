@@ -11,6 +11,7 @@ export class CreateUserDto {
   })
   @Length(3, 20)
   login: string;
+
   @ApiProperty({
     description: 'The password of the user',
     example: 'password',

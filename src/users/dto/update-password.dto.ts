@@ -9,6 +9,7 @@ export class UpdatePasswordDto {
   })
   @IsNotEmpty()
   oldPassword: string;
+
   @ApiProperty({
     description: 'The new password of the user',
     example: 'NewPassword',

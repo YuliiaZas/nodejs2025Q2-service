@@ -9,6 +9,7 @@ export class CreateArtistDto {
   @IsNotEmpty()
   @IsString()
   name: string;
+
   @ApiProperty({
     description: 'Specifies if the artist has a Grammy Award',
     example: false,
