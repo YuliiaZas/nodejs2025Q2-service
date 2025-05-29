@@ -2,7 +2,7 @@ import { NotFoundException } from '@nestjs/common';
 
 export class AppNotFoundException extends NotFoundException {
   constructor(id: string, entity: string) {
-    super(`${entity} with id ${id} not found`);
+    super(`${entity} with ID ${id} not found`);
   }
 }
 

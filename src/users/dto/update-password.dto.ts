@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, Length } from 'class-validator';
 
-// export class UpdatePasswordDto extends PartialType(CreateUserDto) {
 export class UpdatePasswordDto {
   @ApiProperty({
     description: 'The old password of the user',
