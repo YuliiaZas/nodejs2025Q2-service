@@ -14,7 +14,7 @@ import { UpdateArtistDto } from './dto/update-artist.dto';
 import { IdDto } from 'src/shared/dto/id.dto';
 import { ArtistNotFoundException } from 'src/shared/exseptions/not-found.exseptions';
 import { Artist } from './entities/artist.entity';
-import { ApiBody, ApiOperation } from '@nestjs/swagger';
+import { ApiOperation } from '@nestjs/swagger';
 import { ApiIdParams } from 'src/shared/swagger/params';
 import {
   Api200OkResponse,
@@ -34,7 +34,7 @@ export class ArtistsController {
   @ApiOperation({
     summary: 'Create a new artist',
     description:
-      'This endpoint allows you to create a new artist with a name and a flag if the artist has a Grammy Award.',
+      'This endpoint creates a new artist with a name and a flag if the artist has a Grammy Award.',
   })
   @Api201CreatedResponse(ENTITY_NAME, Artist)
   @Api400BadRequestResponse([
@@ -73,11 +73,11 @@ export class ArtistsController {
 
   @Put(':id')
   @ApiOperation({
-    summary: 'Update artist by ID',
-    description: 'This endpoint updates an artist by their ID.',
+    summary: 'Update an artist by ID',
+    description: 'This endpoint updates an artist by their ID with new data.',
   })
   @ApiIdParams(ENTITY_NAME)
-  @ApiBody({ type: UpdateArtistDto })
+  // @ApiBody({ type: UpdateArtistDto })
   @Api200OkResponse('The user password', Artist, false, true)
   @Api400BadRequestResponse()
   @Api404NotFoundResponse(ENTITY_NAME)

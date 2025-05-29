@@ -39,8 +39,7 @@ export class UsersController {
   @Post()
   @ApiOperation({
     summary: 'Create a new user',
-    description:
-      'This endpoint allows to create a new user with a login and password.',
+    description: 'This endpoint creates a new user with a login and password.',
   })
   @Api201CreatedResponse(ENTITY_NAME, User)
   @Api400BadRequestResponse([
@@ -81,7 +80,7 @@ export class UsersController {
   @ApiOperation({
     summary: 'Update user password',
     description:
-      'This endpoint allows to update the password of an existing user. The old password must be provided for verification.',
+      'This endpoint updates the password of an existing user. The old password must be provided for verification.',
   })
   @ApiIdParams(ENTITY_NAME)
   @Api200OkResponse('The user password', User, true, true)
