@@ -1,5 +1,5 @@
 import { ApiResponse } from '@nestjs/swagger';
-import { Entity } from '../types/entity.enum';
+import { EntityName } from '../types/entity-name.enum';
 import { getNotFoundMessage } from '../utils/get-not-found-message';
 import { getIdExample } from './examples';
 import { capitalizeFirstLetter } from '../utils/capitalize-first-letter';
@@ -39,7 +39,7 @@ export function Api403ForbiddenResponse(message: string) {
 }
 
 export function Api404NotFoundResponse(
-  entity: Entity,
+  entity: EntityName,
   inFavoretes: boolean = false,
 ) {
   const info = inFavoretes ? ' in favorites' : '';
@@ -56,7 +56,7 @@ export function Api404NotFoundResponse(
   });
 }
 
-export function Api422NotExistResponse(entity: Entity) {
+export function Api422NotExistResponse(entity: EntityName) {
   return ApiResponse({
     status: 422,
     description: `${capitalizeFirstLetter(entity)} not exist. The ${entity} with the specified ID does not exist.`,

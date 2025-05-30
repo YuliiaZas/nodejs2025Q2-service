@@ -1,6 +1,6 @@
 import { capitalizeFirstLetter } from './capitalize-first-letter';
-import { Entity } from '../types/entity.enum';
+import { EntityName } from '../types/entity-name.enum';
 
-export const getNotExistMessage = (id: string, entity: Entity): string => {
+export const getNotExistMessage = (id: string, entity: EntityName): string => {
   return `${capitalizeFirstLetter(entity)} with ID ${id} does not exist`;
 };

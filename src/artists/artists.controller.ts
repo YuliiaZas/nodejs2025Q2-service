@@ -25,9 +25,9 @@ import {
   Api400BadRequestResponse,
   Api404NotFoundResponse,
 } from 'src/shared/swagger/error-responses';
-import { Entity } from 'src/shared/types/entity.enum';
+import { EntityName } from 'src/shared/types/entity-name.enum';
 
-const ENTITY_NAME = Entity.ARTIST;
+const ENTITY_NAME = EntityName.ARTIST;
 
 @Controller('artist')
 export class ArtistsController {

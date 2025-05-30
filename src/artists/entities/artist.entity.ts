@@ -1,11 +1,11 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { Entity } from 'src/shared/types/entity.enum';
+import { EntityName } from 'src/shared/types/entity-name.enum';
 import { getIdExample } from 'src/shared/swagger/examples';
 
 export class Artist {
   @ApiPropertyOptional({
     format: 'uuid',
-    example: getIdExample(Entity.ARTIST),
+    example: getIdExample(EntityName.ARTIST),
   })
   id: string;
 

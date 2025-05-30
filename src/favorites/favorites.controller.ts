@@ -1,7 +1,7 @@
 import { Controller, Post, Param, Delete, HttpCode, Get } from '@nestjs/common';
 import { FavoritesService } from './favorites.service';
 import { IdDto } from 'src/shared/dto/id.dto';
-import { Entity } from 'src/shared/types/entity.enum';
+import { EntityName } from 'src/shared/types/entity-name.enum';
 import { Favorites } from './entities/favorites.entity';
 import { AppNotFoundException } from 'src/shared/exseptions/not-found.exseption';
 import { AppNotExistException } from 'src/shared/exseptions/not-exist.exseption';
@@ -38,16 +38,16 @@ export class FavoritesController {
     summary: 'Add a artist to favorites',
     description: 'This endpoint adds a artist to the favorites.',
   })
-  @ApiIdParams(Entity.ARTIST)
-  @Api201CreatedResponse(Entity.ARTIST, AddedFavorite, true)
+  @ApiIdParams(EntityName.ARTIST)
+  @Api201CreatedResponse(EntityName.ARTIST, AddedFavorite, true)
   @Api400BadRequestResponse()
-  @Api422NotExistResponse(Entity.ARTIST)
+  @Api422NotExistResponse(EntityName.ARTIST)
   async addArtistToFavorites(@Param() { id }: IdDto): Promise<AddedFavorite> {
     return this.favoritesService
-      .addToFavorites(id, Entity.ARTIST)
+      .addToFavorites(id, EntityName.ARTIST)
       .then((artist) => {
         if (!artist) {
-          throw new AppNotExistException(id, Entity.ARTIST);
+          throw new AppNotExistException(id, EntityName.ARTIST);
         }
         return artist;
       });
@@ -59,16 +59,16 @@ export class FavoritesController {
     summary: 'Remove a artist from favorites',
     description: 'This endpoint removes a artist from the favorites.',
   })
-  @ApiIdParams(Entity.ARTIST)
+  @ApiIdParams(EntityName.ARTIST)
   @Api400BadRequestResponse()
-  @Api204NoContentResponse(Entity.ARTIST, true)
-  @Api404NotFoundResponse(Entity.ARTIST, true)
+  @Api204NoContentResponse(EntityName.ARTIST, true)
+  @Api404NotFoundResponse(EntityName.ARTIST, true)
   async removeArtistFromFavorites(@Param() { id }: IdDto): Promise<void> {
     return this.favoritesService
-      .removeFromFavorites(id, Entity.ARTIST)
+      .removeFromFavorites(id, EntityName.ARTIST)
       .then((isRemoved) => {
         if (!isRemoved) {
-          throw new AppNotFoundException(id, Entity.ARTIST, 'in favorites');
+          throw new AppNotFoundException(id, EntityName.ARTIST, 'in favorites');
         }
         return;
       });
@@ -79,16 +79,16 @@ export class FavoritesController {
     summary: 'Add a album to favorites',
     description: 'This endpoint adds a album to the favorites.',
   })
-  @ApiIdParams(Entity.ALBUM)
-  @Api201CreatedResponse(Entity.ALBUM, AddedFavorite, true)
+  @ApiIdParams(EntityName.ALBUM)
+  @Api201CreatedResponse(EntityName.ALBUM, AddedFavorite, true)
   @Api400BadRequestResponse()
-  @Api422NotExistResponse(Entity.ALBUM)
+  @Api422NotExistResponse(EntityName.ALBUM)
   async addAlbumToFavorites(@Param() { id }: IdDto): Promise<AddedFavorite> {
     return this.favoritesService
-      .addToFavorites(id, Entity.ALBUM)
+      .addToFavorites(id, EntityName.ALBUM)
       .then((album) => {
         if (!album) {
-          throw new AppNotExistException(id, Entity.ALBUM);
+          throw new AppNotExistException(id, EntityName.ALBUM);
         }
         return album;
       });
@@ -100,16 +100,16 @@ export class FavoritesController {
     summary: 'Remove a album from favorites',
     description: 'This endpoint removes a album from the favorites.',
   })
-  @ApiIdParams(Entity.ALBUM)
+  @ApiIdParams(EntityName.ALBUM)
   @Api400BadRequestResponse()
-  @Api204NoContentResponse(Entity.ALBUM, true)
-  @Api404NotFoundResponse(Entity.ALBUM, true)
+  @Api204NoContentResponse(EntityName.ALBUM, true)
+  @Api404NotFoundResponse(EntityName.ALBUM, true)
   async removeAlbumFromFavorites(@Param() { id }: IdDto): Promise<void> {
     return this.favoritesService
-      .removeFromFavorites(id, Entity.ALBUM)
+      .removeFromFavorites(id, EntityName.ALBUM)
       .then((isRemoved) => {
         if (!isRemoved) {
-          throw new AppNotFoundException(id, Entity.ALBUM, 'in favorites');
+          throw new AppNotFoundException(id, EntityName.ALBUM, 'in favorites');
         }
         return;
       });
@@ -120,16 +120,16 @@ export class FavoritesController {
     summary: 'Add a track to favorites',
     description: 'This endpoint adds a track to the favorites.',
   })
-  @ApiIdParams(Entity.TRACK)
-  @Api201CreatedResponse(Entity.TRACK, AddedFavorite, true)
+  @ApiIdParams(EntityName.TRACK)
+  @Api201CreatedResponse(EntityName.TRACK, AddedFavorite, true)
   @Api400BadRequestResponse()
-  @Api422NotExistResponse(Entity.TRACK)
+  @Api422NotExistResponse(EntityName.TRACK)
   async addTrackToFavorites(@Param() { id }: IdDto): Promise<AddedFavorite> {
     return this.favoritesService
-      .addToFavorites(id, Entity.TRACK)
+      .addToFavorites(id, EntityName.TRACK)
       .then((track) => {
         if (!track) {
-          throw new AppNotExistException(id, Entity.TRACK);
+          throw new AppNotExistException(id, EntityName.TRACK);
         }
         return track;
       });
@@ -141,16 +141,16 @@ export class FavoritesController {
     summary: 'Remove a track from favorites',
     description: 'This endpoint removes a track from the favorites.',
   })
-  @ApiIdParams(Entity.TRACK)
+  @ApiIdParams(EntityName.TRACK)
   @Api400BadRequestResponse()
-  @Api204NoContentResponse(Entity.TRACK, true)
-  @Api404NotFoundResponse(Entity.TRACK, true)
+  @Api204NoContentResponse(EntityName.TRACK, true)
+  @Api404NotFoundResponse(EntityName.TRACK, true)
   async removeTrackFromFavorites(@Param() { id }: IdDto): Promise<void> {
     return this.favoritesService
-      .removeFromFavorites(id, Entity.TRACK)
+      .removeFromFavorites(id, EntityName.TRACK)
       .then((isRemoved) => {
         if (!isRemoved) {
-          throw new AppNotFoundException(id, Entity.TRACK, 'in favorites');
+          throw new AppNotFoundException(id, EntityName.TRACK, 'in favorites');
         }
         return;
       });

@@ -1,9 +1,9 @@
 import { capitalizeFirstLetter } from './capitalize-first-letter';
-import { Entity } from '../types/entity.enum';
+import { EntityName } from '../types/entity-name.enum';
 
 export const getNotFoundMessage = (
   id: string,
-  entity: Entity,
+  entity: EntityName,
   info?: string,
 ): string => {
   return `${capitalizeFirstLetter(entity)} with ID ${id} not found${info ? ` ${info}` : ''}`;

@@ -25,9 +25,9 @@ import {
   Api204NoContentResponse,
 } from 'src/shared/swagger/responses';
 import { ApiIdParams } from 'src/shared/swagger/params';
-import { Entity } from 'src/shared/types/entity.enum';
+import { EntityName } from 'src/shared/types/entity-name.enum';
 
-const ENTITY_NAME = Entity.TRACK;
+const ENTITY_NAME = EntityName.TRACK;
 
 @Controller('track')
 export class TracksController {

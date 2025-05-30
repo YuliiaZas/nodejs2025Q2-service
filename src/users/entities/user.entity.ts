@@ -1,12 +1,12 @@
 import { ApiHideProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
-import { Entity } from 'src/shared/types/entity.enum';
+import { EntityName } from 'src/shared/types/entity-name.enum';
 import { getIdExample } from 'src/shared/swagger/examples';
 
 export class User {
   @ApiPropertyOptional({
     format: 'uuid',
-    example: getIdExample(Entity.USER),
+    example: getIdExample(EntityName.USER),
   })
   id: string;
 

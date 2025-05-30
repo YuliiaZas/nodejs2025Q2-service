@@ -1,4 +1,4 @@
-export enum Entity {
+export enum EntityName {
   USER = 'user',
   ARTIST = 'artist',
   ALBUM = 'album',

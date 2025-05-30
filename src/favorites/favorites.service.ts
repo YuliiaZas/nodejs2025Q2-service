@@ -3,13 +3,13 @@ import {
   FavoritesRepository,
   IFavoritesService,
 } from './interfaces/favorites-repository.interface';
-import { MusicEntity } from 'src/shared/types/music-entity.type';
+import { MusicEntityName } from 'src/shared/types/music-entity-name.type';
 import { Favorites } from './entities/favorites.entity';
 import { AlbumsService } from 'src/albums/albums.service';
 import { ArtistsService } from 'src/artists/artists.service';
 import { TracksService } from 'src/tracks/tracks.service';
-import { Entity } from 'src/shared/types/entity.enum';
-import { validateMusicEntity } from 'src/shared/utils/validate-music-entity';
+import { EntityName } from 'src/shared/types/entity-name.enum';
+import { validateMusicEntityName } from 'src/shared/utils/validate-music-entity-name';
 import { AddedFavorite } from './entities/added-favorite.entity';
 
 @Injectable()
@@ -26,15 +26,15 @@ export class FavoritesService implements IFavoritesService {
     const favs = await this.storage.getAllFavorites();
 
     const [artistsRes, albumsRes, tracksRes] = await Promise.all([
-      this.artistsService.getArtistsByIds([...favs.get(Entity.ARTIST)]),
-      this.albumsService.getAlbumsByIds([...favs.get(Entity.ALBUM)]),
-      this.tracksService.getTracksByIds([...favs.get(Entity.TRACK)]),
+      this.artistsService.getArtistsByIds([...favs.get(EntityName.ARTIST)]),
+      this.albumsService.getAlbumsByIds([...favs.get(EntityName.ALBUM)]),
+      this.tracksService.getTracksByIds([...favs.get(EntityName.TRACK)]),
     ]);
 
     await Promise.all([
-      this.removeFromFavoritesByIds(artistsRes.notFoundIds, Entity.ARTIST),
-      this.removeFromFavoritesByIds(albumsRes.notFoundIds, Entity.ALBUM),
-      this.removeFromFavoritesByIds(tracksRes.notFoundIds, Entity.TRACK),
+      this.removeFromFavoritesByIds(artistsRes.notFoundIds, EntityName.ARTIST),
+      this.removeFromFavoritesByIds(albumsRes.notFoundIds, EntityName.ALBUM),
+      this.removeFromFavoritesByIds(tracksRes.notFoundIds, EntityName.TRACK),
     ]);
 
     return {
@@ -46,15 +46,15 @@ export class FavoritesService implements IFavoritesService {
 
   async addToFavorites(
     id: string,
-    entity: MusicEntity,
+    entity: MusicEntityName,
   ): Promise<AddedFavorite | null> {
-    if (!validateMusicEntity(entity)) {
+    if (!validateMusicEntityName(entity)) {
       throw new Error('Invalid music entity type');
     }
     const storage =
-      entity === Entity.ARTIST
+      entity === EntityName.ARTIST
         ? this.artistsService
-        : entity === Entity.ALBUM
+        : entity === EntityName.ALBUM
           ? this.albumsService
           : this.tracksService;
 
@@ -68,16 +68,16 @@ export class FavoritesService implements IFavoritesService {
       .then(() => ({ id, type: entity }));
   }
 
-  removeFromFavorites(id: string, entity: MusicEntity): Promise<boolean> {
-    if (!validateMusicEntity(entity)) return Promise.resolve(false);
+  removeFromFavorites(id: string, entity: MusicEntityName): Promise<boolean> {
+    if (!validateMusicEntityName(entity)) return Promise.resolve(false);
     return this.storage.removeFromFavorites(id, entity);
   }
 
   removeFromFavoritesByIds(
     ids: string[],
-    entity: MusicEntity,
+    entity: MusicEntityName,
   ): Promise<boolean[]> {
-    if (!ids.length || !validateMusicEntity(entity)) {
+    if (!ids.length || !validateMusicEntityName(entity)) {
       return Promise.resolve([]);
     }
 

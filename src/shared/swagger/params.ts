@@ -1,8 +1,8 @@
 import { ApiParam } from '@nestjs/swagger';
 import { getIdExample } from './examples';
-import { Entity } from '../types/entity.enum';
+import { EntityName } from '../types/entity-name.enum';
 
-export function ApiIdParams(entity: Entity) {
+export function ApiIdParams(entity: EntityName) {
   return ApiParam({
     name: 'id',
     type: String,
