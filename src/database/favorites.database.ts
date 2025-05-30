@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import {
-  FavoritesRepository,
-  FavoritesStore,
-} from 'src/favorites/interfaces/favorites-repository.interface';
+import { FavoritesRepository } from 'src/favorites/interfaces/favorites-repository.interface';
+import { FavoritesStore } from 'src/favorites/interfaces/favorites-store.interface';
 import { EntityName } from 'src/shared/types/entity-name.enum';
 import { MusicEntityName } from 'src/shared/types/music-entity-name.type';
 
@@ -16,21 +14,18 @@ export class FavoritesDatabase implements FavoritesRepository {
     this.favorites.set(EntityName.TRACK, new Set());
   }
 
-  async getAllFavorites(): Promise<FavoritesStore> {
+  async getAll(): Promise<FavoritesStore> {
     return Promise.resolve(this.favorites);
   }
 
-  async addToFavorites(id: string, entity: MusicEntityName): Promise<boolean> {
+  async addEntity(id: string, entity: MusicEntityName): Promise<boolean> {
     return Promise.resolve(this.favorites.get(entity)).then((set) => {
       set.add(id);
       return true;
     });
   }
 
-  async removeFromFavorites(
-    id: string,
-    entity: MusicEntityName,
-  ): Promise<boolean> {
+  async removeEntity(id: string, entity: MusicEntityName): Promise<boolean> {
     return Promise.resolve(this.favorites.get(entity)).then((set) => {
       return set.delete(id);
     });
