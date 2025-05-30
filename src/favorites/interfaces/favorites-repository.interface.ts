@@ -3,6 +3,6 @@ import { FavoritesStore } from './favorites-store.interface';
 
 export interface FavoritesRepository {
   getAll(): Promise<FavoritesStore>;
-  addEntity(id: string, entity: MusicEntityName): Promise<boolean>;
-  removeEntity(id: string, entity: MusicEntityName): Promise<boolean>;
+  addEntityId(id: string, entity: MusicEntityName): Promise<boolean>;
+  removeEntityId(id: string, entity: MusicEntityName): Promise<boolean>;
 }

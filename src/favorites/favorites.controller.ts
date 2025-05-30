@@ -44,7 +44,7 @@ export class FavoritesController {
   @Api422NotExistResponse(EntityName.ARTIST)
   async addArtistToFavorites(@Param() { id }: IdDto): Promise<AddedFavorite> {
     return this.favoritesService
-      .addEntity(id, EntityName.ARTIST)
+      .addEntityId(id, EntityName.ARTIST)
       .then((artist) => {
         if (!artist) {
           throw new AppNotExistException(id, EntityName.ARTIST);
@@ -65,7 +65,7 @@ export class FavoritesController {
   @Api404NotFoundResponse(EntityName.ARTIST, true)
   async removeArtistFromFavorites(@Param() { id }: IdDto): Promise<void> {
     return this.favoritesService
-      .removeEntity(id, EntityName.ARTIST)
+      .removeEntityId(id, EntityName.ARTIST)
       .then((isRemoved) => {
         if (!isRemoved) {
           throw new AppNotFoundException(id, EntityName.ARTIST, 'in favorites');
@@ -85,7 +85,7 @@ export class FavoritesController {
   @Api422NotExistResponse(EntityName.ALBUM)
   async addAlbumToFavorites(@Param() { id }: IdDto): Promise<AddedFavorite> {
     return this.favoritesService
-      .addEntity(id, EntityName.ALBUM)
+      .addEntityId(id, EntityName.ALBUM)
       .then((album) => {
         if (!album) {
           throw new AppNotExistException(id, EntityName.ALBUM);
@@ -106,7 +106,7 @@ export class FavoritesController {
   @Api404NotFoundResponse(EntityName.ALBUM, true)
   async removeAlbumFromFavorites(@Param() { id }: IdDto): Promise<void> {
     return this.favoritesService
-      .removeEntity(id, EntityName.ALBUM)
+      .removeEntityId(id, EntityName.ALBUM)
       .then((isRemoved) => {
         if (!isRemoved) {
           throw new AppNotFoundException(id, EntityName.ALBUM, 'in favorites');
@@ -126,7 +126,7 @@ export class FavoritesController {
   @Api422NotExistResponse(EntityName.TRACK)
   async addTrackToFavorites(@Param() { id }: IdDto): Promise<AddedFavorite> {
     return this.favoritesService
-      .addEntity(id, EntityName.TRACK)
+      .addEntityId(id, EntityName.TRACK)
       .then((track) => {
         if (!track) {
           throw new AppNotExistException(id, EntityName.TRACK);
@@ -147,7 +147,7 @@ export class FavoritesController {
   @Api404NotFoundResponse(EntityName.TRACK, true)
   async removeTrackFromFavorites(@Param() { id }: IdDto): Promise<void> {
     return this.favoritesService
-      .removeEntity(id, EntityName.TRACK)
+      .removeEntityId(id, EntityName.TRACK)
       .then((isRemoved) => {
         if (!isRemoved) {
           throw new AppNotFoundException(id, EntityName.TRACK, 'in favorites');

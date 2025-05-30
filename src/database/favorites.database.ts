@@ -18,14 +18,14 @@ export class FavoritesDatabase implements FavoritesRepository {
     return Promise.resolve(this.favorites);
   }
 
-  async addEntity(id: string, entity: MusicEntityName): Promise<boolean> {
+  async addEntityId(id: string, entity: MusicEntityName): Promise<boolean> {
     return Promise.resolve(this.favorites.get(entity)).then((set) => {
       set.add(id);
       return true;
     });
   }
 
-  async removeEntity(id: string, entity: MusicEntityName): Promise<boolean> {
+  async removeEntityId(id: string, entity: MusicEntityName): Promise<boolean> {
     return Promise.resolve(this.favorites.get(entity)).then((set) => {
       return set.delete(id);
     });
