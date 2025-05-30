@@ -12,7 +12,7 @@ import { AlbumsService } from './albums.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { IdDto } from 'src/shared/dto/id.dto';
-import { AppNotFoundException } from 'src/shared/exseptions/not-found.exseptions';
+import { AppNotFoundException } from 'src/shared/exseptions/not-found.exseption';
 import { Album } from './entities/album.entity';
 import { ApiOperation } from '@nestjs/swagger';
 import {
@@ -68,7 +68,7 @@ export class AlbumsController {
   @Api400BadRequestResponse()
   @Api404NotFoundResponse(ENTITY_NAME)
   async getAlbum(@Param() { id }: IdDto): Promise<Album> {
-    return this.albumsService.getAlbum(id).then((album) => {
+    return this.albumsService.getById(id).then((album) => {
       if (!album) throw new AppNotFoundException(id, ENTITY_NAME);
       return album;
     });

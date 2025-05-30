@@ -20,7 +20,7 @@ export class ArtistsService {
     return this.storage.getArtists();
   }
 
-  async getArtist(id: string): Promise<Artist | null> {
+  async getById(id: string): Promise<Artist | null> {
     return this.storage.getArtist(id);
   }
 

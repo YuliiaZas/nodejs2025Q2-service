@@ -20,7 +20,7 @@ export class AlbumsService {
     return this.storage.getAlbums();
   }
 
-  async getAlbum(id: string): Promise<Album | null> {
+  async getById(id: string): Promise<Album | null> {
     return this.storage.getAlbum(id);
   }
 

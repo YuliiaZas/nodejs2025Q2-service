@@ -20,7 +20,7 @@ export class TracksService {
     return this.storage.getTracks();
   }
 
-  async getTrack(id: string): Promise<Track | null> {
+  async getById(id: string): Promise<Track | null> {
     return this.storage.getTrack(id);
   }
 

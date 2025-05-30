@@ -12,7 +12,7 @@ import { TracksService } from './tracks.service';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 import { IdDto } from 'src/shared/dto/id.dto';
-import { AppNotFoundException } from 'src/shared/exseptions/not-found.exseptions';
+import { AppNotFoundException } from 'src/shared/exseptions/not-found.exseption';
 import { Track } from './entities/track.entity';
 import { ApiOperation } from '@nestjs/swagger';
 import {
@@ -68,7 +68,7 @@ export class TracksController {
   @Api400BadRequestResponse()
   @Api404NotFoundResponse(ENTITY_NAME)
   async getTrack(@Param() { id }: IdDto): Promise<Track> {
-    return this.tracksService.getTrack(id).then((track) => {
+    return this.tracksService.getById(id).then((track) => {
       if (!track) throw new AppNotFoundException(id, ENTITY_NAME);
       return track;
     });

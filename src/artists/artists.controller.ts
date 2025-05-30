@@ -12,7 +12,7 @@ import { ArtistsService } from './artists.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
 import { IdDto } from 'src/shared/dto/id.dto';
-import { AppNotFoundException } from 'src/shared/exseptions/not-found.exseptions';
+import { AppNotFoundException } from 'src/shared/exseptions/not-found.exseption';
 import { Artist } from './entities/artist.entity';
 import { ApiOperation } from '@nestjs/swagger';
 import { ApiIdParams } from 'src/shared/swagger/params';
@@ -66,7 +66,7 @@ export class ArtistsController {
   @Api400BadRequestResponse()
   @Api404NotFoundResponse(ENTITY_NAME)
   async getArtist(@Param() { id }: IdDto): Promise<Artist> {
-    return this.artistsService.getArtist(id).then((artist) => {
+    return this.artistsService.getById(id).then((artist) => {
       if (!artist) throw new AppNotFoundException(id, ENTITY_NAME);
       return artist;
     });

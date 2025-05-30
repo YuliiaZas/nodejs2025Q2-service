@@ -6,9 +6,16 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ArtistsModule } from './artists/artists.module';
 import { AlbumsModule } from './albums/albums.module';
 import { TracksModule } from './tracks/tracks.module';
+import { FavoritesModule } from './favorites/favorites.module';
 
 @Module({
-  imports: [UsersModule, ArtistsModule, AlbumsModule, TracksModule],
+  imports: [
+    UsersModule,
+    ArtistsModule,
+    AlbumsModule,
+    TracksModule,
+    FavoritesModule,
+  ],
   controllers: [AppController],
   providers: [
     AppService,
