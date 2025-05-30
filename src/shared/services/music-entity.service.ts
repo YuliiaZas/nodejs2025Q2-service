@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { DeletedEvent } from '../events/delete-event';
+import { DeleteEventName } from '../types/delete-event-name.enum';
+import { GetEntitiesByIdsType } from '../types/get-entities-by-ids.type';
 import { MusicEntityActions } from '../interfaces/music-entity-actions.interface';
 import { MusicEntity } from '../types/music-entity.type';
-import { GetEntitiesByIdsType } from '../types/get-entities-by-ids.type';
 import { IMusicEntityService } from '../interfaces/music-entity-service.interface';
 
 @Injectable()
@@ -11,7 +14,11 @@ export abstract class MusicEntityService<
   UpdateDto = Partial<CreateDto>,
 > implements IMusicEntityService<T, CreateDto, UpdateDto>
 {
-  constructor(protected storage: MusicEntityActions<T, CreateDto>) {}
+  constructor(
+    protected readonly storage: MusicEntityActions<T, CreateDto>,
+    protected readonly eventEmitter: EventEmitter2,
+    private readonly deleteEventType: DeleteEventName,
+  ) {}
 
   async add(createDto: CreateDto): Promise<T> {
     return this.storage.add(createDto);
@@ -30,7 +37,13 @@ export abstract class MusicEntityService<
     if (!entity) {
       return false;
     }
-    return this.storage.deleteById(id);
+
+    return this.storage.deleteById(id).then((result) => {
+      if (result) {
+        this.emitDelteEvent(id);
+      }
+      return result;
+    });
   }
 
   async updateById(id: string, updateDto: UpdateDto): Promise<T | null> {
@@ -49,5 +62,9 @@ export abstract class MusicEntityService<
 
   async getByIds(ids: string[]): Promise<GetEntitiesByIdsType<T>> {
     return this.storage.getByIds(ids);
+  }
+
+  private emitDelteEvent(id: string): void {
+    this.eventEmitter.emit(this.deleteEventType, new DeletedEvent(id));
   }
 }
