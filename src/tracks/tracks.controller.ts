@@ -16,11 +16,13 @@ import { AppNotFoundException } from 'src/shared/exseptions/not-found.exseption'
 import { Track } from './entities/track.entity';
 import { ApiOperation } from '@nestjs/swagger';
 import {
+  Api400BadRequestResponse,
+  Api404NotFoundResponse,
+} from 'src/shared/swagger/error-responses';
+import {
   Api200OkResponse,
   Api201CreatedResponse,
   Api204NoContentResponse,
-  Api400BadRequestResponse,
-  Api404NotFoundResponse,
 } from 'src/shared/swagger/responses';
 import { ApiIdParams } from 'src/shared/swagger/params';
 import { Entity } from 'src/shared/types/entity.enum';

@@ -20,11 +20,13 @@ import { AppNotFoundException } from 'src/shared/exseptions/not-found.exseption'
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   Api400BadRequestResponse,
-  Api201CreatedResponse,
   Api403ForbiddenResponse,
-  Api204NoContentResponse,
   Api404NotFoundResponse,
+} from 'src/shared/swagger/error-responses';
+import {
   Api200OkResponse,
+  Api201CreatedResponse,
+  Api204NoContentResponse,
 } from 'src/shared/swagger/responses';
 import { ApiIdParams } from 'src/shared/swagger/params';
 import { Entity } from 'src/shared/types/entity.enum';

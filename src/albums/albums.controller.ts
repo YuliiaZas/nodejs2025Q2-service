@@ -19,9 +19,11 @@ import {
   Api200OkResponse,
   Api201CreatedResponse,
   Api204NoContentResponse,
+} from 'src/shared/swagger/responses';
+import {
   Api400BadRequestResponse,
   Api404NotFoundResponse,
-} from 'src/shared/swagger/responses';
+} from 'src/shared/swagger/error-responses';
 import { ApiIdParams } from 'src/shared/swagger/params';
 import { Entity } from 'src/shared/types/entity.enum';
 
