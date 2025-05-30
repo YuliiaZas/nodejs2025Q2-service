@@ -1,41 +1,20 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
-import { ArtistsRepository } from './interfaces/artists-repository.interface';
-import { GetEntitiesByIdsType } from 'src/shared/types/get-entities-by-ids.type';
+import { MusicEntityActions } from 'src/shared/interfaces/music-entity-actions.interface';
 import { Artist } from './entities/artist.entity';
+import { MusicEntityService } from 'src/shared/services/music-entity.service';
 
 @Injectable()
-export class ArtistsService {
+export class ArtistsService extends MusicEntityService<
+  Artist,
+  CreateArtistDto,
+  UpdateArtistDto
+> {
   constructor(
-    @Inject('ArtistsRepository')
-    private readonly storage: ArtistsRepository,
-  ) {}
-
-  async addArtist(createArtistDto: CreateArtistDto): Promise<Artist> {
-    return this.storage.addArtist(createArtistDto);
-  }
-
-  async getArtists(): Promise<Artist[]> {
-    return this.storage.getArtists();
-  }
-
-  async getById(id: string): Promise<Artist | null> {
-    return this.storage.getArtist(id);
-  }
-
-  async deleteArtist(id: string): Promise<boolean> {
-    return this.storage.deleteArtist(id);
-  }
-
-  async updateArtist(
-    id: string,
-    updateArtistDto: UpdateArtistDto,
-  ): Promise<Artist | null> {
-    return this.storage.updateArtistFields(id, updateArtistDto);
-  }
-
-  async getArtistsByIds(ids: string[]): Promise<GetEntitiesByIdsType<Artist>> {
-    return this.storage.getArtistsByIds(ids);
+    @Inject('ArtistsDatabase')
+    storage: MusicEntityActions<Artist, CreateArtistDto, UpdateArtistDto>,
+  ) {
+    super(storage);
   }
 }

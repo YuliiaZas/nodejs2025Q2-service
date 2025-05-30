@@ -8,7 +8,7 @@ import { AlbumsDatabase } from 'src/database/albums.database';
   providers: [
     AlbumsService,
     {
-      provide: 'AlbumsRepository',
+      provide: 'AlbumsDatabase',
       useClass: AlbumsDatabase,
     },
   ],

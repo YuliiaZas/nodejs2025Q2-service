@@ -8,7 +8,7 @@ import { ArtistsDatabase } from 'src/database/artists.database';
   providers: [
     ArtistsService,
     {
-      provide: 'ArtistsRepository',
+      provide: 'ArtistsDatabase',
       useClass: ArtistsDatabase,
     },
   ],

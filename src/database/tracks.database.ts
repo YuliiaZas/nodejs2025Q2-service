@@ -1,15 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
+import { MusicEntityActions } from 'src/shared/interfaces/music-entity-actions.interface';
 import { GetEntitiesByIdsType } from 'src/shared/types/get-entities-by-ids.type';
 import { CreateTrackDto } from 'src/tracks/dto/create-track.dto';
+import { UpdateTrackDto } from 'src/tracks/dto/update-track.dto';
 import { Track } from 'src/tracks/entities/track.entity';
-import { TracksRepository } from 'src/tracks/interfaces/tracks-repository.interface';
 
 @Injectable()
-export class TracksDatabase implements TracksRepository {
+export class TracksDatabase
+  implements MusicEntityActions<Track, CreateTrackDto, UpdateTrackDto>
+{
   private tracks: Map<string, Track> = new Map();
 
-  async addTrack(trackParams: CreateTrackDto): Promise<Track> {
+  async add(trackParams: CreateTrackDto): Promise<Track> {
     const track: Track = {
       id: randomUUID(),
       ...trackParams,
@@ -18,21 +21,21 @@ export class TracksDatabase implements TracksRepository {
     return Promise.resolve(track);
   }
 
-  async getTracks(): Promise<Track[]> {
+  async getAll(): Promise<Track[]> {
     return Promise.resolve(Array.from(this.tracks.values()));
   }
 
-  async getTrack(id: string): Promise<Track | null> {
+  async getById(id: string): Promise<Track | null> {
     return Promise.resolve(this.tracks.get(id));
   }
 
-  async deleteTrack(id: string): Promise<boolean> {
+  async deleteById(id: string): Promise<boolean> {
     return Promise.resolve(this.tracks.delete(id));
   }
 
-  async updateTrackFields(
+  async updateById(
     id: string,
-    updatedFields: Partial<Track>,
+    updatedFields: UpdateTrackDto,
   ): Promise<Track | null> {
     const track = await this.tracks.get(id);
     if (!track) {
@@ -46,7 +49,7 @@ export class TracksDatabase implements TracksRepository {
     return Promise.resolve(updatedTrack);
   }
 
-  async getTracksByIds(ids: string[]): Promise<GetEntitiesByIdsType<Track>> {
+  async getByIds(ids: string[]): Promise<GetEntitiesByIdsType<Track>> {
     const result: GetEntitiesByIdsType<Track> = {
       items: [],
       notFoundIds: [],

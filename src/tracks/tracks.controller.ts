@@ -47,7 +47,7 @@ export class TracksController {
     'year must be an integer number',
   ])
   async addTrack(@Body() createTrackDto: CreateTrackDto): Promise<Track> {
-    return this.tracksService.addTrack(createTrackDto);
+    return this.tracksService.add(createTrackDto);
   }
 
   @Get()
@@ -57,7 +57,7 @@ export class TracksController {
   })
   @Api200OkResponse(ENTITY_NAME, [Track])
   async getTracks(): Promise<Track[]> {
-    return this.tracksService.getTracks();
+    return this.tracksService.getAll();
   }
 
   @Get(':id')
@@ -90,7 +90,7 @@ export class TracksController {
     @Param() { id }: IdDto,
     @Body() updateTrackDto: UpdateTrackDto,
   ): Promise<Track> {
-    return this.tracksService.updateTrack(id, updateTrackDto).then((track) => {
+    return this.tracksService.updateById(id, updateTrackDto).then((track) => {
       if (!track) throw new AppNotFoundException(id, ENTITY_NAME);
       return track;
     });
@@ -108,7 +108,7 @@ export class TracksController {
   @Api404NotFoundResponse(ENTITY_NAME)
   async deleteTrack(@Param() { id }: IdDto): Promise<void> {
     //TODO: Remove from tracks, artists
-    return this.tracksService.deleteTrack(id).then((deleted) => {
+    return this.tracksService.deleteById(id).then((deleted) => {
       if (!deleted) throw new AppNotFoundException(id, ENTITY_NAME);
       return;
     });

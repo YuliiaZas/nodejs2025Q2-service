@@ -47,7 +47,7 @@ export class AlbumsController {
     'year must be an integer number',
   ])
   async addAlbum(@Body() createAlbumDto: CreateAlbumDto): Promise<Album> {
-    return this.albumsService.addAlbum(createAlbumDto);
+    return this.albumsService.add(createAlbumDto);
   }
 
   @Get()
@@ -57,7 +57,7 @@ export class AlbumsController {
   })
   @Api200OkResponse(ENTITY_NAME, [Album])
   async getAlbums(): Promise<Album[]> {
-    return this.albumsService.getAlbums();
+    return this.albumsService.getAll();
   }
 
   @Get(':id')
@@ -90,7 +90,7 @@ export class AlbumsController {
     @Param() { id }: IdDto,
     @Body() updateAlbumDto: UpdateAlbumDto,
   ): Promise<Album> {
-    return this.albumsService.updateAlbum(id, updateAlbumDto).then((album) => {
+    return this.albumsService.updateById(id, updateAlbumDto).then((album) => {
       if (!album) throw new AppNotFoundException(id, ENTITY_NAME);
       return album;
     });
@@ -108,7 +108,7 @@ export class AlbumsController {
   @Api404NotFoundResponse(ENTITY_NAME)
   async deleteAlbum(@Param() { id }: IdDto): Promise<void> {
     //TODO: Remove from tracks, artists
-    return this.albumsService.deleteAlbum(id).then((deleted) => {
+    return this.albumsService.deleteById(id).then((deleted) => {
       if (!deleted) throw new AppNotFoundException(id, ENTITY_NAME);
       return;
     });

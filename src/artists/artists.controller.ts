@@ -45,7 +45,7 @@ export class ArtistsController {
     'grammy must be a boolean value',
   ])
   async addArtist(@Body() createArtistDto: CreateArtistDto): Promise<Artist> {
-    return this.artistsService.addArtist(createArtistDto);
+    return this.artistsService.add(createArtistDto);
   }
 
   @Get()
@@ -55,7 +55,7 @@ export class ArtistsController {
   })
   @Api200OkResponse(ENTITY_NAME, [Artist])
   async getArtists(): Promise<Artist[]> {
-    return this.artistsService.getArtists();
+    return this.artistsService.getAll();
   }
 
   @Get(':id')
@@ -88,7 +88,7 @@ export class ArtistsController {
     @Body() updateArtistDto: UpdateArtistDto,
   ): Promise<Artist> {
     return this.artistsService
-      .updateArtist(id, updateArtistDto)
+      .updateById(id, updateArtistDto)
       .then((artist) => {
         if (!artist) throw new AppNotFoundException(id, ENTITY_NAME);
         return artist;
@@ -107,7 +107,7 @@ export class ArtistsController {
   @Api404NotFoundResponse(ENTITY_NAME)
   async deleteArtist(@Param() { id }: IdDto): Promise<void> {
     //TODO: Remove from tracks, albums
-    return this.artistsService.deleteArtist(id).then((deleted) => {
+    return this.artistsService.deleteById(id).then((deleted) => {
       if (!deleted) throw new AppNotFoundException(id, ENTITY_NAME);
       return;
     });

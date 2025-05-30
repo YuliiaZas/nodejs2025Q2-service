@@ -2,14 +2,17 @@ import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { CreateAlbumDto } from 'src/albums/dto/create-album.dto';
 import { Album } from 'src/albums/entities/album.entity';
-import { AlbumsRepository } from 'src/albums/interfaces/albums-repository.interface';
+import { UpdateArtistDto } from 'src/artists/dto/update-artist.dto';
+import { MusicEntityActions } from 'src/shared/interfaces/music-entity-actions.interface';
 import { GetEntitiesByIdsType } from 'src/shared/types/get-entities-by-ids.type';
 
 @Injectable()
-export class AlbumsDatabase implements AlbumsRepository {
+export class AlbumsDatabase
+  implements MusicEntityActions<Album, CreateAlbumDto, UpdateArtistDto>
+{
   private albums: Map<string, Album> = new Map();
 
-  async addAlbum(albumParams: CreateAlbumDto): Promise<Album> {
+  async add(albumParams: CreateAlbumDto): Promise<Album> {
     const album: Album = {
       id: randomUUID(),
       ...albumParams,
@@ -18,21 +21,21 @@ export class AlbumsDatabase implements AlbumsRepository {
     return Promise.resolve(album);
   }
 
-  async getAlbums(): Promise<Album[]> {
+  async getAll(): Promise<Album[]> {
     return Promise.resolve(Array.from(this.albums.values()));
   }
 
-  async getAlbum(id: string): Promise<Album | null> {
+  async getById(id: string): Promise<Album | null> {
     return Promise.resolve(this.albums.get(id));
   }
 
-  async deleteAlbum(id: string): Promise<boolean> {
+  async deleteById(id: string): Promise<boolean> {
     return Promise.resolve(this.albums.delete(id));
   }
 
-  async updateAlbumFields(
+  async updateById(
     id: string,
-    updatedFields: Partial<Album>,
+    updatedFields: UpdateArtistDto,
   ): Promise<Album | null> {
     const album = await this.albums.get(id);
     if (!album) {
@@ -46,7 +49,7 @@ export class AlbumsDatabase implements AlbumsRepository {
     return Promise.resolve(updatedAlbum);
   }
 
-  async getAlbumsByIds(ids: string[]): Promise<GetEntitiesByIdsType<Album>> {
+  async getByIds(ids: string[]): Promise<GetEntitiesByIdsType<Album>> {
     const result: GetEntitiesByIdsType<Album> = {
       items: [],
       notFoundIds: [],

@@ -8,7 +8,7 @@ import { TracksDatabase } from 'src/database/tracks.database';
   providers: [
     TracksService,
     {
-      provide: 'TracksRepository',
+      provide: 'TracksDatabase',
       useClass: TracksDatabase,
     },
   ],

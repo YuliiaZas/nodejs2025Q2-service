@@ -26,9 +26,9 @@ export class FavoritesService implements IFavoritesService {
     const favs = await this.storage.getAllFavorites();
 
     const [artistsRes, albumsRes, tracksRes] = await Promise.all([
-      this.artistsService.getArtistsByIds([...favs.get(EntityName.ARTIST)]),
-      this.albumsService.getAlbumsByIds([...favs.get(EntityName.ALBUM)]),
-      this.tracksService.getTracksByIds([...favs.get(EntityName.TRACK)]),
+      this.artistsService.getByIds([...favs.get(EntityName.ARTIST)]),
+      this.albumsService.getByIds([...favs.get(EntityName.ALBUM)]),
+      this.tracksService.getByIds([...favs.get(EntityName.TRACK)]),
     ]);
 
     await Promise.all([

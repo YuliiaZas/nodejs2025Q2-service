@@ -1,15 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { CreateArtistDto } from 'src/artists/dto/create-artist.dto';
+import { UpdateArtistDto } from 'src/artists/dto/update-artist.dto';
 import { Artist } from 'src/artists/entities/artist.entity';
-import { ArtistsRepository } from 'src/artists/interfaces/artists-repository.interface';
+import { MusicEntityActions } from 'src/shared/interfaces/music-entity-actions.interface';
 import { GetEntitiesByIdsType } from 'src/shared/types/get-entities-by-ids.type';
 
 @Injectable()
-export class ArtistsDatabase implements ArtistsRepository {
+export class ArtistsDatabase
+  implements MusicEntityActions<Artist, CreateArtistDto, UpdateArtistDto>
+{
   private artists: Map<string, Artist> = new Map();
 
-  async addArtist(artistParams: CreateArtistDto): Promise<Artist> {
+  async add(artistParams: CreateArtistDto): Promise<Artist> {
     const artist: Artist = {
       id: randomUUID(),
       ...artistParams,
@@ -18,21 +21,21 @@ export class ArtistsDatabase implements ArtistsRepository {
     return Promise.resolve(artist);
   }
 
-  async getArtists(): Promise<Artist[]> {
+  async getAll(): Promise<Artist[]> {
     return Promise.resolve(Array.from(this.artists.values()));
   }
 
-  async getArtist(id: string): Promise<Artist | null> {
+  async getById(id: string): Promise<Artist | null> {
     return Promise.resolve(this.artists.get(id));
   }
 
-  async deleteArtist(id: string): Promise<boolean> {
+  async deleteById(id: string): Promise<boolean> {
     return Promise.resolve(this.artists.delete(id));
   }
 
-  async updateArtistFields(
+  async updateById(
     id: string,
-    updatedFields: Partial<Artist>,
+    updatedFields: UpdateArtistDto,
   ): Promise<Artist | null> {
     const artist = await this.artists.get(id);
     if (!artist) {
@@ -46,7 +49,7 @@ export class ArtistsDatabase implements ArtistsRepository {
     return Promise.resolve(updatedArtist);
   }
 
-  async getArtistsByIds(ids: string[]): Promise<GetEntitiesByIdsType<Artist>> {
+  async getByIds(ids: string[]): Promise<GetEntitiesByIdsType<Artist>> {
     const result: GetEntitiesByIdsType<Artist> = {
       items: [],
       notFoundIds: [],
