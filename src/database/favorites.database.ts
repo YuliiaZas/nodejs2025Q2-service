@@ -27,7 +27,10 @@ export class FavoritesDatabase implements FavoritesRepository {
     });
   }
 
-  async removeFromFavorites(id: string, entity: MusicEntityName): Promise<boolean> {
+  async removeFromFavorites(
+    id: string,
+    entity: MusicEntityName,
+  ): Promise<boolean> {
     return Promise.resolve(this.favorites.get(entity)).then((set) => {
       return set.delete(id);
     });

@@ -41,14 +41,17 @@ export class UsersDatabase implements UsersRepository {
     if (!user) {
       return Promise.resolve(null);
     }
+
     const updatedUser = {
       ...user,
       ...updatedFields,
       version: user.version + 1,
       updatedAt: Date.now(),
     };
-    await this.users.set(id, updatedUser);
-    return Promise.resolve(updatedUser);
+
+    return Promise.resolve(this.users.set(id, updatedUser)).then(
+      () => updatedUser,
+    );
   }
 
   private getNewUserBoilerplate(): Omit<User, keyof CreateUserDto> {
