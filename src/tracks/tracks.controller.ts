@@ -107,7 +107,6 @@ export class TracksController {
   @Api400BadRequestResponse()
   @Api404NotFoundResponse(ENTITY_NAME)
   async deleteTrack(@Param() { id }: IdDto): Promise<void> {
-    //TODO: Remove from tracks, artists
     return this.tracksService.deleteById(id).then((deleted) => {
       if (!deleted) throw new AppNotFoundException(id, ENTITY_NAME);
       return;

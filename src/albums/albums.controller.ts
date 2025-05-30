@@ -107,7 +107,6 @@ export class AlbumsController {
   @Api400BadRequestResponse()
   @Api404NotFoundResponse(ENTITY_NAME)
   async deleteAlbum(@Param() { id }: IdDto): Promise<void> {
-    //TODO: Remove from tracks, artists
     return this.albumsService.deleteById(id).then((deleted) => {
       if (!deleted) throw new AppNotFoundException(id, ENTITY_NAME);
       return;
