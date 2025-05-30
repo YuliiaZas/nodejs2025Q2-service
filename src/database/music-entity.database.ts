@@ -8,8 +8,7 @@ import { MusicEntity } from '../shared/types/music-entity.type';
 export class MusicEntityDatabase<
   T extends { id: string } = MusicEntity,
   CreateDto extends Partial<Omit<T, 'id'>> = Partial<Omit<T, 'id'>>,
-  UpdateDto = Partial<CreateDto>,
-> implements MusicEntityActions<T, CreateDto, UpdateDto>
+> implements MusicEntityActions<T, CreateDto>
 {
   private musicEntities: Map<string, T> = new Map();
 
@@ -36,20 +35,10 @@ export class MusicEntityDatabase<
     return Promise.resolve(this.musicEntities.delete(id));
   }
 
-  async updateById(id: string, updatedFields: UpdateDto): Promise<T | null> {
-    const musicEntity = await this.musicEntities.get(id);
-    if (!musicEntity) {
-      return Promise.resolve(null);
-    }
-
-    const updatedAlbum = {
-      ...musicEntity,
-      ...updatedFields,
-    };
-
-    return Promise.resolve(this.musicEntities.set(id, updatedAlbum)).then(
-      () => updatedAlbum,
-    );
+  async update(musicEntity: T): Promise<T | null> {
+    return Promise.resolve(
+      this.musicEntities.set(musicEntity.id, musicEntity),
+    ).then(() => musicEntity);
   }
 
   async getByIds(ids: string[]): Promise<GetEntitiesByIdsType<T>> {

@@ -2,17 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { MusicEntityActions } from '../interfaces/music-entity-actions.interface';
 import { MusicEntity } from '../types/music-entity.type';
 import { GetEntitiesByIdsType } from '../types/get-entities-by-ids.type';
+import { IMusicEntityService } from '../interfaces/music-entity-service.interface';
 
 @Injectable()
 export abstract class MusicEntityService<
   T = MusicEntity,
-  CreateDto = unknown,
+  CreateDto extends Partial<Omit<T, 'id'>> = Partial<Omit<T, 'id'>>,
   UpdateDto = Partial<CreateDto>,
-> implements MusicEntityActions<T, CreateDto, UpdateDto>
+> implements IMusicEntityService<T, CreateDto, UpdateDto>
 {
-  constructor(
-    private readonly storage: MusicEntityActions<T, CreateDto, UpdateDto>,
-  ) {}
+  constructor(protected storage: MusicEntityActions<T, CreateDto>) {}
 
   async add(createDto: CreateDto): Promise<T> {
     return this.storage.add(createDto);
@@ -27,11 +26,25 @@ export abstract class MusicEntityService<
   }
 
   async deleteById(id: string): Promise<boolean> {
+    const entity = await this.getById(id);
+    if (!entity) {
+      return false;
+    }
     return this.storage.deleteById(id);
   }
 
   async updateById(id: string, updateDto: UpdateDto): Promise<T | null> {
-    return this.storage.updateById(id, updateDto);
+    const entity = await this.getById(id);
+
+    if (!entity) return null;
+    if (Object.keys(updateDto).length === 0) return entity;
+
+    const updatedEntity: T = {
+      ...entity,
+      ...updateDto,
+    };
+
+    return this.storage.update(updatedEntity);
   }
 
   async getByIds(ids: string[]): Promise<GetEntitiesByIdsType<T>> {
