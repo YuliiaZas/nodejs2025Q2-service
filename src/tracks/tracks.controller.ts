@@ -18,6 +18,7 @@ import { ApiOperation } from '@nestjs/swagger';
 import {
   Api400BadRequestResponse,
   Api404NotFoundResponse,
+  Api422NotExistResponse,
 } from 'src/shared/swagger/error-responses';
 import {
   Api200OkResponse,
@@ -46,6 +47,7 @@ export class TracksController {
     'year must not be less than 1900',
     'year must be an integer number',
   ])
+  @Api422NotExistResponse(EntityName.ARTIST, EntityName.ALBUM)
   async addTrack(@Body() createTrackDto: CreateTrackDto): Promise<Track> {
     return this.tracksService.add(createTrackDto);
   }
@@ -86,6 +88,7 @@ export class TracksController {
   @Api200OkResponse('The user password', Track, false, true)
   @Api400BadRequestResponse()
   @Api404NotFoundResponse(ENTITY_NAME)
+  @Api422NotExistResponse(EntityName.ARTIST, EntityName.ALBUM)
   async updateTrack(
     @Param() { id }: IdDto,
     @Body() updateTrackDto: UpdateTrackDto,

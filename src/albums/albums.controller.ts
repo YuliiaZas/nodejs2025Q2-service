@@ -23,6 +23,7 @@ import {
 import {
   Api400BadRequestResponse,
   Api404NotFoundResponse,
+  Api422NotExistResponse,
 } from 'src/shared/swagger/error-responses';
 import { ApiIdParams } from 'src/shared/swagger/params';
 import { EntityName } from 'src/shared/types/entity-name.enum';
@@ -46,6 +47,7 @@ export class AlbumsController {
     'year must not be less than 1900',
     'year must be an integer number',
   ])
+  @Api422NotExistResponse(EntityName.ARTIST)
   async addAlbum(@Body() createAlbumDto: CreateAlbumDto): Promise<Album> {
     return this.albumsService.add(createAlbumDto);
   }
@@ -86,6 +88,7 @@ export class AlbumsController {
   @Api200OkResponse('The user password', Album, false, true)
   @Api400BadRequestResponse()
   @Api404NotFoundResponse(ENTITY_NAME)
+  @Api422NotExistResponse(EntityName.ARTIST)
   async updateAlbum(
     @Param() { id }: IdDto,
     @Body() updateAlbumDto: UpdateAlbumDto,

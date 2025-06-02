@@ -56,10 +56,14 @@ export function Api404NotFoundResponse(
   });
 }
 
-export function Api422NotExistResponse(entity: EntityName) {
+export function Api422NotExistResponse(
+  entity: EntityName,
+  secondEntity?: EntityName,
+) {
+  const secondEntityValue = secondEntity ? ` or ${secondEntity}` : '';
   return ApiResponse({
     status: 422,
-    description: `${capitalizeFirstLetter(entity)} not exist. The ${entity} with the specified ID does not exist.`,
+    description: `${capitalizeFirstLetter(entity)}${secondEntityValue} not exist. The ${entity}${secondEntityValue} with the specified ID does not exist.`,
     schema: {
       example: {
         statusCode: 422,
