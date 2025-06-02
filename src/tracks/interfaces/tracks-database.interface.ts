@@ -1,6 +1,7 @@
-import { MusicEntityActions } from 'src/shared/interfaces/music-entity-actions.interface';
-import { Track } from '../entities/track.entity';
+import { MusicEntityActions } from '@/shared';
+
 import { CreateTrackDto } from '../dto/create-track.dto';
+import { Track } from '../entities/track.entity';
 
 export interface ITracksDatabase
   extends MusicEntityActions<Track, CreateTrackDto> {

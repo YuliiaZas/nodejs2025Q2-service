@@ -1,9 +1,10 @@
 import { ApiResponse } from '@nestjs/swagger';
+
 import { EntityName } from '../types/entity-name.enum';
-import { getNotFoundMessage } from '../utils/get-not-found-message';
-import { getIdExample } from './examples';
 import { capitalizeFirstLetter } from '../utils/capitalize-first-letter';
 import { getNotExistMessage } from '../utils/get-not-exist-message';
+import { getNotFoundMessage } from '../utils/get-not-found-message';
+import { getIdExample } from './examples';
 
 export function Api400BadRequestResponse(details: string[] = []) {
   return ApiResponse({

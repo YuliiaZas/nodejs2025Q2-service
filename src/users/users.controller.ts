@@ -1,35 +1,35 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Param,
-  Delete,
-  Put,
-  ForbiddenException,
-  UseInterceptors,
   ClassSerializerInterceptor,
+  Controller,
+  Delete,
+  ForbiddenException,
+  Get,
   HttpCode,
+  Param,
+  Post,
+  Put,
+  UseInterceptors,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdatePasswordDto } from './dto/update-password.dto';
-import { User } from './entities/user.entity';
-import { IdDto } from 'src/shared/dto/id.dto';
-import { AppNotFoundException } from 'src/shared/exseptions/not-found.exseption';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import {
-  Api400BadRequestResponse,
-  Api403ForbiddenResponse,
-  Api404NotFoundResponse,
-} from 'src/shared/swagger/error-responses';
+
 import {
   Api200OkResponse,
   Api201CreatedResponse,
   Api204NoContentResponse,
-} from 'src/shared/swagger/responses';
-import { ApiIdParams } from 'src/shared/swagger/params';
-import { EntityName } from 'src/shared/types/entity-name.enum';
+  Api400BadRequestResponse,
+  Api403ForbiddenResponse,
+  Api404NotFoundResponse,
+  ApiIdParams,
+  AppNotFoundException,
+  EntityName,
+  IdDto,
+} from '@/shared';
+
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdatePasswordDto } from './dto/update-password.dto';
+import { User } from './entities/user.entity';
+import { UsersService } from './users.service';
 
 const ENTITY_NAME = EntityName.USER;
 

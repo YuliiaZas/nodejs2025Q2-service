@@ -1,8 +1,12 @@
 import { Injectable } from '@nestjs/common';
+
 import { randomUUID } from 'node:crypto';
-import { MusicEntityActions } from 'src/shared/interfaces/music-entity-actions.interface';
-import { GetEntitiesByIdsType } from 'src/shared/types/get-entities-by-ids.type';
-import { MusicEntity } from '../shared/types/music-entity.type';
+
+import {
+  GetEntitiesByIdsType,
+  MusicEntity,
+  MusicEntityActions,
+} from '@/shared/';
 
 @Injectable()
 export class MusicEntityDatabase<

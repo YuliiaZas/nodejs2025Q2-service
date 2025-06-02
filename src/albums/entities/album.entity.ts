@@ -1,6 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { EntityName } from 'src/shared/types/entity-name.enum';
-import { getIdExample } from 'src/shared/swagger/examples';
+
+import { EntityName, getIdExample } from '@/shared';
 
 export class Album {
   @ApiPropertyOptional({

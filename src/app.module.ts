@@ -1,12 +1,14 @@
-import { ClassSerializerInterceptor, Module } from '@nestjs/common';
-import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-import { ArtistsModule } from './artists/artists.module';
-import { AlbumsModule } from './albums/albums.module';
-import { TracksModule } from './tracks/tracks.module';
-import { FavoritesModule } from './favorites/favorites.module';
+
+import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+
+import { AlbumsModule } from './albums/albums.module';
+import { AppService } from './app.service';
+import { ArtistsModule } from './artists/artists.module';
+import { FavoritesModule } from './favorites/favorites.module';
+import { TracksModule } from './tracks/tracks.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [

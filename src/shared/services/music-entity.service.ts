@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+
 import { DeletedEvent } from '../events/delete-event';
+import { MusicEntityActions } from '../interfaces/music-entity-actions.interface';
+import { IMusicEntityService } from '../interfaces/music-entity-service.interface';
 import { DeleteEventName } from '../types/delete-event-name.enum';
 import { GetEntitiesByIdsType } from '../types/get-entities-by-ids.type';
-import { MusicEntityActions } from '../interfaces/music-entity-actions.interface';
 import { MusicEntity } from '../types/music-entity.type';
-import { IMusicEntityService } from '../interfaces/music-entity-service.interface';
 
 @Injectable()
 export abstract class MusicEntityService<

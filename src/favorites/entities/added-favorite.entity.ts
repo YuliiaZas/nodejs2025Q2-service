@@ -1,7 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { getIdExample } from 'src/shared/swagger/examples';
-import { EntityName } from 'src/shared/types/entity-name.enum';
-import { MusicEntityName } from 'src/shared/types/music-entity-name.type';
+
+import { EntityName, getIdExample, MusicEntityName } from '@/shared';
 
 export class AddedFavorite {
   @ApiPropertyOptional({

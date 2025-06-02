@@ -1,23 +1,24 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { IFavoritesDatabase } from './interfaces/favorites-database.interface';
-import { MusicEntityName } from 'src/shared/types/music-entity-name.type';
-import { Favorites } from './entities/favorites.entity';
-import { AlbumsService } from 'src/albums/albums.service';
-import { ArtistsService } from 'src/artists/artists.service';
-import { TracksService } from 'src/tracks/tracks.service';
-import { EntityName } from 'src/shared/types/entity-name.enum';
-import { validateMusicEntityName } from 'src/shared/utils/validate-music-entity-name';
-import { AddedFavorite } from './entities/added-favorite.entity';
-import { DeleteEventName } from 'src/shared/types/delete-event-name.enum';
 import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
-import { DeletedEvent } from 'src/shared/events/delete-event';
-import { IFavoritesService } from './interfaces/favorites-service.interface';
+
+import { Album, AlbumsService } from '@/albums';
+import { Artist, ArtistsService } from '@/artists';
+import {
+  DeletedEvent,
+  DeleteEventName,
+  EntityName,
+  GetEntitiesByIdsType,
+  MusicEntityName,
+  TOKEN_DATABASE,
+  validateMusicEntityName,
+} from '@/shared';
+import { Track, TracksService } from '@/tracks';
+
+import { AddedFavorite } from './entities/added-favorite.entity';
+import { Favorites } from './entities/favorites.entity';
+import { IFavoritesDatabase } from './interfaces/favorites-database.interface';
 import { FavoritesIds } from './interfaces/favorites-ids.interface';
-import { GetEntitiesByIdsType } from 'src/shared/types/get-entities-by-ids.type';
-import { Artist } from 'src/artists/entities/artist.entity';
-import { Track } from 'src/tracks/entities/track.entity';
-import { Album } from 'src/albums/entities/album.entity';
-import { TOKEN_DATABASE } from 'src/shared/tokens/databases';
+import { IFavoritesService } from './interfaces/favorites-service.interface';
 
 const NOT_EXIST_EVENT = 'favorets.notExist';
 

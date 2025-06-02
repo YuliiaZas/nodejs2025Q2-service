@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { UsersController } from './users.controller';
-import { UsersDatabase } from 'src/database/users.database';
+
+import { UsersDatabase } from '@/database';
+import { EntityName, TOKEN_DATABASE } from '@/shared';
+
 import { PasswordService } from './password.service';
-import { TOKEN_DATABASE } from 'src/shared/tokens/databases';
-import { EntityName } from 'src/shared/types/entity-name.enum';
+import { UsersController } from './users.controller';
+import { UsersService } from './users.service';
 
 @Module({
   controllers: [UsersController],

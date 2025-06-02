@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
+
 import { randomUUID } from 'node:crypto';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import { User } from 'src/users/entities/user.entity';
-import { IUsersDatabase } from 'src/users/interfaces/users-database.interface';
+
+import { CreateUserDto, IUsersDatabase, User } from '@/users';
 
 @Injectable()
 export class UsersDatabase implements IUsersDatabase {

@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
-import { AlbumsService } from './albums.service';
+
+import { ArtistsModule } from '@/artists';
+import { AlbumsDatabase } from '@/database';
+import { EntityName, TOKEN_DATABASE } from '@/shared';
+
 import { AlbumsController } from './albums.controller';
-import { AlbumsDatabase } from 'src/database/albums.database';
-import { TOKEN_DATABASE } from 'src/shared/tokens/databases';
-import { EntityName } from 'src/shared/types/entity-name.enum';
-import { ArtistsModule } from 'src/artists/artists.module';
+import { AlbumsService } from './albums.service';
 
 @Module({
   imports: [ArtistsModule],

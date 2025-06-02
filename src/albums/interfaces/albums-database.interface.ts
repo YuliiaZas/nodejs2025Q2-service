@@ -1,6 +1,7 @@
-import { MusicEntityActions } from 'src/shared/interfaces/music-entity-actions.interface';
-import { Album } from '../entities/album.entity';
+import { MusicEntityActions } from '@/shared';
+
 import { CreateAlbumDto } from '../dto/create-album.dto';
+import { Album } from '../entities/album.entity';
 
 export interface IAlbumsDatabase
   extends MusicEntityActions<Album, CreateAlbumDto> {

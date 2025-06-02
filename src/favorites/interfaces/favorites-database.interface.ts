@@ -1,4 +1,5 @@
-import { MusicEntityName } from 'src/shared/types/music-entity-name.type';
+import { MusicEntityName } from '@/shared';
+
 import { FavoritesStore } from './favorites-store.interface';
 
 export interface IFavoritesDatabase {

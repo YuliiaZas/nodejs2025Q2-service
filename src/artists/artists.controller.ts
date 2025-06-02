@@ -1,31 +1,31 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Param,
+  Controller,
   Delete,
-  Put,
+  Get,
   HttpCode,
+  Param,
+  Post,
+  Put,
 } from '@nestjs/common';
-import { ArtistsService } from './artists.service';
-import { CreateArtistDto } from './dto/create-artist.dto';
-import { UpdateArtistDto } from './dto/update-artist.dto';
-import { IdDto } from 'src/shared/dto/id.dto';
-import { AppNotFoundException } from 'src/shared/exseptions/not-found.exseption';
-import { Artist } from './entities/artist.entity';
 import { ApiOperation } from '@nestjs/swagger';
-import { ApiIdParams } from 'src/shared/swagger/params';
+
 import {
   Api200OkResponse,
   Api201CreatedResponse,
   Api204NoContentResponse,
-} from 'src/shared/swagger/responses';
-import {
   Api400BadRequestResponse,
   Api404NotFoundResponse,
-} from 'src/shared/swagger/error-responses';
-import { EntityName } from 'src/shared/types/entity-name.enum';
+  ApiIdParams,
+  AppNotFoundException,
+  EntityName,
+  IdDto,
+} from '@/shared';
+
+import { ArtistsService } from './artists.service';
+import { CreateArtistDto } from './dto/create-artist.dto';
+import { UpdateArtistDto } from './dto/update-artist.dto';
+import { Artist } from './entities/artist.entity';
 
 const ENTITY_NAME = EntityName.ARTIST;
 

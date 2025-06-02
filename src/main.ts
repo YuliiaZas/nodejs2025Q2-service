@@ -1,9 +1,12 @@
-import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+
 import { ValidationPipe } from '@nestjs/common/pipes/validation.pipe';
 import { SwaggerModule } from '@nestjs/swagger';
+
+import { AppModule } from './app.module';
 import { createSwaggerDocument } from './shared/swagger/swagger.config';
+
+import 'dotenv/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

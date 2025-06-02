@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
+
+import { CreateTrackDto, ITracksDatabase, Track } from '@/tracks';
+
 import { MusicEntityDatabase } from './music-entity.database';
-import { CreateTrackDto } from 'src/tracks/dto/create-track.dto';
-import { Track } from 'src/tracks/entities/track.entity';
-import { ITracksDatabase } from 'src/tracks/interfaces/tracks-database.interface';
 
 @Injectable()
 export class TracksDatabase

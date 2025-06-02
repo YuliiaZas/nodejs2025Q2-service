@@ -1,12 +1,14 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { IUsersDatabase } from './interfaces/users-database.interface';
-import { User } from './entities/user.entity';
+
 import { plainToInstance } from 'class-transformer';
-import { PasswordService } from './password.service';
-import { TOKEN_DATABASE } from 'src/shared/tokens/databases';
-import { EntityName } from 'src/shared/types/entity-name.enum';
+
+import { EntityName, TOKEN_DATABASE } from '@/shared';
+
+import { CreateUserDto } from './dto/create-user.dto';
+import { User } from './entities/user.entity';
+import { IUsersDatabase } from './interfaces/users-database.interface';
 import { IUsersService } from './interfaces/users-service.interface';
+import { PasswordService } from './password.service';
 
 @Injectable()
 export class UsersService implements IUsersService {

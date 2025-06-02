@@ -1,32 +1,32 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Param,
+  Controller,
   Delete,
-  Put,
+  Get,
   HttpCode,
+  Param,
+  Post,
+  Put,
 } from '@nestjs/common';
-import { AlbumsService } from './albums.service';
-import { CreateAlbumDto } from './dto/create-album.dto';
-import { UpdateAlbumDto } from './dto/update-album.dto';
-import { IdDto } from 'src/shared/dto/id.dto';
-import { AppNotFoundException } from 'src/shared/exseptions/not-found.exseption';
-import { Album } from './entities/album.entity';
 import { ApiOperation } from '@nestjs/swagger';
+
 import {
   Api200OkResponse,
   Api201CreatedResponse,
   Api204NoContentResponse,
-} from 'src/shared/swagger/responses';
-import {
   Api400BadRequestResponse,
   Api404NotFoundResponse,
   Api422NotExistResponse,
-} from 'src/shared/swagger/error-responses';
-import { ApiIdParams } from 'src/shared/swagger/params';
-import { EntityName } from 'src/shared/types/entity-name.enum';
+  ApiIdParams,
+  AppNotFoundException,
+  EntityName,
+  IdDto,
+} from '@/shared';
+
+import { AlbumsService } from './albums.service';
+import { CreateAlbumDto } from './dto/create-album.dto';
+import { UpdateAlbumDto } from './dto/update-album.dto';
+import { Album } from './entities/album.entity';
 
 const ENTITY_NAME = EntityName.ALBUM;
 

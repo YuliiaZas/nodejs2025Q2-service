@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAlbumDto } from 'src/albums/dto/create-album.dto';
-import { Album } from 'src/albums/entities/album.entity';
+
+import { Album, CreateAlbumDto, IAlbumsDatabase } from '@/albums';
+
 import { MusicEntityDatabase } from './music-entity.database';
-import { IAlbumsDatabase } from 'src/albums/interfaces/albums-database.interface';
 
 @Injectable()
 export class AlbumsDatabase

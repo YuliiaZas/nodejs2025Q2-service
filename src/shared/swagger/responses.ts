@@ -1,4 +1,5 @@
 import { ApiResponse } from '@nestjs/swagger';
+
 import { SwaggerResponseType } from '../types/swagger-response.type';
 
 export function Api200OkResponse<T extends SwaggerResponseType>(

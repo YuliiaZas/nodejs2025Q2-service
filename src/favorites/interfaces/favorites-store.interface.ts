@@ -1,3 +1,3 @@
-import { MusicEntityName } from 'src/shared/types/music-entity-name.type';
+import { MusicEntityName } from '@/shared';
 
 export type FavoritesStore = Map<MusicEntityName, Set<string>>;

@@ -1,32 +1,32 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Param,
+  Controller,
   Delete,
-  Put,
+  Get,
   HttpCode,
+  Param,
+  Post,
+  Put,
 } from '@nestjs/common';
-import { TracksService } from './tracks.service';
-import { CreateTrackDto } from './dto/create-track.dto';
-import { UpdateTrackDto } from './dto/update-track.dto';
-import { IdDto } from 'src/shared/dto/id.dto';
-import { AppNotFoundException } from 'src/shared/exseptions/not-found.exseption';
-import { Track } from './entities/track.entity';
 import { ApiOperation } from '@nestjs/swagger';
-import {
-  Api400BadRequestResponse,
-  Api404NotFoundResponse,
-  Api422NotExistResponse,
-} from 'src/shared/swagger/error-responses';
+
 import {
   Api200OkResponse,
   Api201CreatedResponse,
   Api204NoContentResponse,
-} from 'src/shared/swagger/responses';
-import { ApiIdParams } from 'src/shared/swagger/params';
-import { EntityName } from 'src/shared/types/entity-name.enum';
+  Api400BadRequestResponse,
+  Api404NotFoundResponse,
+  Api422NotExistResponse,
+  ApiIdParams,
+  AppNotFoundException,
+  EntityName,
+  IdDto,
+} from '@/shared';
+
+import { CreateTrackDto } from './dto/create-track.dto';
+import { UpdateTrackDto } from './dto/update-track.dto';
+import { Track } from './entities/track.entity';
+import { TracksService } from './tracks.service';
 
 const ENTITY_NAME = EntityName.TRACK;
 

@@ -1,23 +1,23 @@
-import { Controller, Post, Param, Delete, HttpCode, Get } from '@nestjs/common';
-import { FavoritesService } from './favorites.service';
-import { IdDto } from 'src/shared/dto/id.dto';
-import { EntityName } from 'src/shared/types/entity-name.enum';
-import { Favorites } from './entities/favorites.entity';
-import { AppNotFoundException } from 'src/shared/exseptions/not-found.exseption';
-import { AppNotExistException } from 'src/shared/exseptions/not-exist.exseption';
+import { Controller, Delete, Get, HttpCode, Param, Post } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
-import { ApiIdParams } from 'src/shared/swagger/params';
-import {
-  Api400BadRequestResponse,
-  Api404NotFoundResponse,
-  Api422NotExistResponse,
-} from 'src/shared/swagger/error-responses';
+
 import {
   Api200OkResponse,
   Api201CreatedResponse,
   Api204NoContentResponse,
-} from 'src/shared/swagger/responses';
+  Api400BadRequestResponse,
+  Api404NotFoundResponse,
+  Api422NotExistResponse,
+  ApiIdParams,
+  AppNotExistException,
+  AppNotFoundException,
+  EntityName,
+  IdDto,
+} from '@/shared';
+
 import { AddedFavorite } from './entities/added-favorite.entity';
+import { Favorites } from './entities/favorites.entity';
+import { FavoritesService } from './favorites.service';
 
 @Controller('favs')
 export class FavoritesController {

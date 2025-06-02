@@ -1,9 +1,11 @@
 import { NestFactory } from '@nestjs/core';
+
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
-import { AppModule } from 'src/app.module';
-import { createSwaggerDocument } from 'src/shared/swagger/swagger.config';
 import * as yaml from 'yaml';
+
+import { createSwaggerDocument } from '@/shared';
+import { AppModule } from 'src/app.module';
 
 async function generateSwaggerDoc() {
   const app = await NestFactory.create(AppModule);

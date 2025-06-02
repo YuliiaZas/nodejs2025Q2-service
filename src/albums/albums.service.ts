@@ -1,16 +1,20 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
-import { DeletedEvent } from 'src/shared/events/delete-event';
-import { DeleteEventName } from 'src/shared/types/delete-event-name.enum';
-import { MusicEntityService } from 'src/shared/services/music-entity.service';
-import { Album } from './entities/album.entity';
+
+import { ArtistsService } from '@/artists';
+import {
+  AppNotExistException,
+  DeletedEvent,
+  DeleteEventName,
+  EntityName,
+  MusicEntityService,
+  TOKEN_DATABASE,
+} from '@/shared';
+
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
+import { Album } from './entities/album.entity';
 import type { IAlbumsDatabase } from './interfaces/albums-database.interface';
-import { TOKEN_DATABASE } from 'src/shared/tokens/databases';
-import { EntityName } from 'src/shared/types/entity-name.enum';
-import { ArtistsService } from 'src/artists/artists.service';
-import { AppNotExistException } from 'src/shared/exseptions/not-exist.exseption';
 
 @Injectable()
 export class AlbumsService extends MusicEntityService<
