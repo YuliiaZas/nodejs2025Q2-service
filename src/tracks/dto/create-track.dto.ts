@@ -6,6 +6,7 @@ import {
   IsOptional,
   IsString,
   IsUUID,
+  Min,
 } from 'class-validator';
 
 export class CreateTrackDto {
@@ -22,6 +23,7 @@ export class CreateTrackDto {
     example: 201,
   })
   @IsInt()
+  @Min(0)
   duration: number;
 
   @ApiPropertyOptional({
