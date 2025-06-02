@@ -8,13 +8,37 @@
 ## Downloading
 
 ```
-git clone {repository URL}
+git clone https://github.com/YuliiaZas/nodejs2025Q2-service
+```
+
+## Change directory to the project root
+
+```
+cd nodejs2025Q2-service
+```
+## Change branch to `development`
+
+```
+git checkout development
 ```
 
 ## Installing NPM modules
 
 ```
 npm install
+```
+
+## Environment variables
+Create a `.env` file in the root directory of the project
+
+```
+cp .env.example .env
+```
+
+and add the following variables:
+
+```
+PORT=4000
 ```
 
 ## Running application
@@ -26,6 +50,14 @@ npm start
 After starting the app on port (4000 as default) you can open
 in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
 For more information about OpenAPI/Swagger please visit https://swagger.io/.
+
+## Generating OpenAPI documentation
+To generate OpenAPI documentation, run the following command:
+
+```
+npm run generate:doc
+```
+This will create a `doc/api.yaml` file containing the OpenAPI documentation.
 
 ## Testing
 
@@ -41,18 +73,6 @@ To run only one of all test suites
 
 ```
 npm run test -- <path to suite>
-```
-
-To run all test with authorization
-
-```
-npm run test:auth
-```
-
-To run only specific test suite with authorization
-
-```
-npm run test:auth -- <path to suite>
 ```
 
 ### Auto-fix and format
