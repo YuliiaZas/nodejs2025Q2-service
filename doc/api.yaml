@@ -377,6 +377,15 @@ paths:
                     - year must not be less than 1900
                     - year must be an integer number
                   error: Bad Request
+        "422":
+          description: Artist not exist. The artist with the specified ID does not exist.
+          content:
+            application/json:
+              schema:
+                example:
+                  statusCode: 422
+                  message: Artist with ID 123e4567-e89b-12d3-a456-426614174001 does not exist
+                  error: Not Found
       summary: Create a new album
       tags: &a3
         - Albums
@@ -478,6 +487,15 @@ paths:
                   statusCode: 404
                   message: Album with ID 123e4567-e89b-12d3-a456-426614174002 not found
                   error: Not Found
+        "422":
+          description: Artist not exist. The artist with the specified ID does not exist.
+          content:
+            application/json:
+              schema:
+                example:
+                  statusCode: 422
+                  message: Artist with ID 123e4567-e89b-12d3-a456-426614174001 does not exist
+                  error: Not Found
       summary: Update an album by ID
       tags: *a3
     delete:
@@ -547,6 +565,16 @@ paths:
                     - year must not be less than 1900
                     - year must be an integer number
                   error: Bad Request
+        "422":
+          description: Artist or album not exist. The artist or album with the specified
+            ID does not exist.
+          content:
+            application/json:
+              schema:
+                example:
+                  statusCode: 422
+                  message: Artist with ID 123e4567-e89b-12d3-a456-426614174001 does not exist
+                  error: Not Found
       summary: Create a new track
       tags: &a4
         - Tracks
@@ -647,6 +675,16 @@ paths:
                 example:
                   statusCode: 404
                   message: Track with ID 123e4567-e89b-12d3-a456-426614174003 not found
+                  error: Not Found
+        "422":
+          description: Artist or album not exist. The artist or album with the specified
+            ID does not exist.
+          content:
+            application/json:
+              schema:
+                example:
+                  statusCode: 422
+                  message: Artist with ID 123e4567-e89b-12d3-a456-426614174001 does not exist
                   error: Not Found
       summary: Update an track by ID
       tags: *a4
