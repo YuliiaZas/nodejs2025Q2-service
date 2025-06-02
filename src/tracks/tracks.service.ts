@@ -7,6 +7,8 @@ import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 import { Track } from './entities/track.entity';
 import type { ITracksDatabase } from './interfaces/tracks-database.interface';
+import { TOKEN_DATABASE } from 'src/shared/tokens/databases';
+import { EntityName } from 'src/shared/types/entity-name.enum';
 
 @Injectable()
 export class TracksService extends MusicEntityService<
@@ -15,7 +17,7 @@ export class TracksService extends MusicEntityService<
   UpdateTrackDto
 > {
   constructor(
-    @Inject('TracksDatabase')
+    @Inject(TOKEN_DATABASE[EntityName.TRACK])
     protected readonly storage: ITracksDatabase,
     protected readonly eventEmitter: EventEmitter2,
   ) {

@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { FavoritesRepository } from 'src/favorites/interfaces/favorites-repository.interface';
+import { IFavoritesDatabase } from 'src/favorites/interfaces/favorites-database.interface';
 import { FavoritesStore } from 'src/favorites/interfaces/favorites-store.interface';
 import { EntityName } from 'src/shared/types/entity-name.enum';
 import { MusicEntityName } from 'src/shared/types/music-entity-name.type';
 
 @Injectable()
-export class FavoritesDatabase implements FavoritesRepository {
+export class FavoritesDatabase implements IFavoritesDatabase {
   private readonly favorites: FavoritesStore = new Map();
 
   constructor() {

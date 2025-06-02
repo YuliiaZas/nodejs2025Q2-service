@@ -7,6 +7,8 @@ import { Album } from './entities/album.entity';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import type { IAlbumsDatabase } from './interfaces/albums-database.interface';
+import { TOKEN_DATABASE } from 'src/shared/tokens/databases';
+import { EntityName } from 'src/shared/types/entity-name.enum';
 
 @Injectable()
 export class AlbumsService extends MusicEntityService<
@@ -15,7 +17,7 @@ export class AlbumsService extends MusicEntityService<
   UpdateAlbumDto
 > {
   constructor(
-    @Inject('AlbumsDatabase')
+    @Inject(TOKEN_DATABASE[EntityName.ALBUM])
     protected readonly storage: IAlbumsDatabase,
     protected readonly eventEmitter: EventEmitter2,
   ) {

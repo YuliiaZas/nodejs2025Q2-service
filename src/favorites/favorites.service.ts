@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { FavoritesRepository } from './interfaces/favorites-repository.interface';
+import { IFavoritesDatabase } from './interfaces/favorites-database.interface';
 import { MusicEntityName } from 'src/shared/types/music-entity-name.type';
 import { Favorites } from './entities/favorites.entity';
 import { AlbumsService } from 'src/albums/albums.service';
@@ -17,6 +17,7 @@ import { GetEntitiesByIdsType } from 'src/shared/types/get-entities-by-ids.type'
 import { Artist } from 'src/artists/entities/artist.entity';
 import { Track } from 'src/tracks/entities/track.entity';
 import { Album } from 'src/albums/entities/album.entity';
+import { TOKEN_DATABASE } from 'src/shared/tokens/databases';
 
 const NOT_EXIST_EVENT = 'favorets.notExist';
 
@@ -28,8 +29,8 @@ type AllEntities = [
 @Injectable()
 export class FavoritesService implements IFavoritesService {
   constructor(
-    @Inject('FavoritesRepository')
-    private readonly storage: FavoritesRepository,
+    @Inject(TOKEN_DATABASE.favorites)
+    private readonly storage: IFavoritesDatabase,
     private readonly artistsService: ArtistsService,
     private readonly albumsService: AlbumsService,
     private readonly tracksService: TracksService,

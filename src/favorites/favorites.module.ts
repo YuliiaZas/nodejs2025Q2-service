@@ -5,6 +5,7 @@ import { ArtistsModule } from 'src/artists/artists.module';
 import { AlbumsModule } from 'src/albums/albums.module';
 import { TracksModule } from 'src/tracks/tracks.module';
 import { FavoritesDatabase } from 'src/database/favorites.database';
+import { TOKEN_DATABASE } from 'src/shared/tokens/databases';
 
 @Module({
   imports: [AlbumsModule, ArtistsModule, TracksModule],
@@ -12,7 +13,7 @@ import { FavoritesDatabase } from 'src/database/favorites.database';
   providers: [
     FavoritesService,
     {
-      provide: 'FavoritesRepository',
+      provide: TOKEN_DATABASE.favorites,
       useClass: FavoritesDatabase,
     },
   ],

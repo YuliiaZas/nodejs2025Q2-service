@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { User } from 'src/users/entities/user.entity';
-import { UsersRepository } from 'src/users/interfaces/users-repository.interface';
+import { IUsersDatabase } from 'src/users/interfaces/users-database.interface';
 
 @Injectable()
-export class UsersDatabase implements UsersRepository {
+export class UsersDatabase implements IUsersDatabase {
   private users: Map<string, User> = new Map();
 
   async addUser(userParams: CreateUserDto): Promise<User> {

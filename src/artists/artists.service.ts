@@ -6,6 +6,8 @@ import { MusicEntityService } from 'src/shared/services/music-entity.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
 import { Artist } from './entities/artist.entity';
+import { TOKEN_DATABASE } from 'src/shared/tokens/databases';
+import { EntityName } from 'src/shared/types/entity-name.enum';
 
 @Injectable()
 export class ArtistsService extends MusicEntityService<
@@ -14,7 +16,7 @@ export class ArtistsService extends MusicEntityService<
   UpdateArtistDto
 > {
   constructor(
-    @Inject('ArtistsDatabase')
+    @Inject(TOKEN_DATABASE[EntityName.ARTIST])
     protected readonly storage: MusicEntityActions<Artist, CreateArtistDto>,
     protected readonly eventEmitter: EventEmitter2,
   ) {
