@@ -12,6 +12,7 @@
     "docker:up": "docker compose up --build",
     "docker:down": "docker compose down",
     "docker:restart": "docker compose down && docker compose up --build",
+    "docker:scan": "docker scout quickview",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",

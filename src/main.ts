@@ -3,6 +3,8 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common/pipes/validation.pipe';
 import { SwaggerModule } from '@nestjs/swagger';
 
+import { log } from '@/shared';
+
 import { AppModule } from './app.module';
 import { createSwaggerDocument } from './shared/swagger/swagger.config';
 
@@ -23,5 +25,7 @@ async function bootstrap() {
   SwaggerModule.setup('doc', app, document);
 
   await app.listen(process.env.PORT || 4000);
+
+  log(`Application started at port ${process.env.PORT || 4000}`);
 }
 bootstrap();

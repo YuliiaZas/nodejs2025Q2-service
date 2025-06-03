@@ -1,6 +1,24 @@
-version: '3.8'
-
 services:
+  app:
+    container_name: nestjs-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: npm run start:dev
+    depends_on:
+      - db
+    restart: always
+    ports:
+      - ${PORT}:${PORT}
+    env_file:
+      - .env
+    volumes:
+      - ./logs:/usr/src/app/logs
+      - .:/usr/src/app
+      - node_modules:/usr/src/app/node_modules
+    networks:
+      - library-network
+
   db:
     container_name: postgress-db
     build: 
@@ -14,25 +32,14 @@ services:
     networks:
       - library-network
 
-  app:
-    container_name: nestjs-app
-    build:
-      context: .
-      dockerfile: Dockerfile
-    depends_on:
-      - db
-    restart: always
-    ports:
-      - ${PORT}:${PORT}
-    env_file:
-      - .env
-    networks:
-      - library-network
-    command: npm run start:dev
-
 volumes:
   postgres_data:
     driver: local
+  logs:
+    driver: local
+  node_modules:
+    driver: local
+  
 
 networks:
   library-network:
