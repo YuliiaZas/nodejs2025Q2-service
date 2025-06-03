@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 
+import { FavoritesDatabase } from 'database';
+
 import { AlbumsModule } from '@/albums';
 import { ArtistsModule } from '@/artists/';
-import { FavoritesDatabase } from '@/database';
 import { TOKEN_DATABASE } from '@/shared';
 import { TracksModule } from '@/tracks';
 

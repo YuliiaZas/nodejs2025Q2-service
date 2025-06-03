@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 
-import { UsersDatabase } from '@/database';
+import { UsersDatabase } from 'database';
+
 import { EntityName, TOKEN_DATABASE } from '@/shared';
 
 import { PasswordService } from './password.service';
