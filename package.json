@@ -9,6 +9,9 @@
     "node": ">=22.14.0"
   },
   "scripts": {
+    "docker:up": "docker compose up --build",
+    "docker:down": "docker compose down",
+    "docker:restart": "docker compose down && docker compose up --build",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
