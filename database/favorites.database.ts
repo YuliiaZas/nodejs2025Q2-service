@@ -30,3 +30,17 @@ export class FavoritesDatabase implements IFavoritesDatabase {
     });
   }
 }
+
+// const fav = await prisma.favorites.findUnique({ where: { id: 'singleton' } });
+
+// const artists = await prisma.artist.findMany({
+//   where: { id: { in: fav.artistsIds } },
+// });
+
+// const albums = await prisma.album.findMany({
+//   where: { id: { in: fav.albumsIds } },
+// });
+
+// const tracks = await prisma.track.findMany({
+//   where: { id: { in: fav.tracksIds } },
+// });

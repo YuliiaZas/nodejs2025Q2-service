@@ -4,13 +4,13 @@ import { TracksDatabase } from 'database';
 
 import { AlbumsModule } from '@/albums';
 import { ArtistsModule } from '@/artists';
-import { EntityName, TOKEN_DATABASE } from '@/shared';
+import { EntityName, SharedModule, TOKEN_DATABASE } from '@/shared';
 
 import { TracksController } from './tracks.controller';
 import { TracksService } from './tracks.service';
 
 @Module({
-  imports: [ArtistsModule, AlbumsModule],
+  imports: [ArtistsModule, AlbumsModule, SharedModule],
   controllers: [TracksController],
   providers: [
     TracksService,

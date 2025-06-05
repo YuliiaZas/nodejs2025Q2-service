@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
+import { EntityName, PrismaService } from '@/shared';
 import { CreateTrackDto, ITracksDatabase, Track } from '@/tracks';
 
 import { MusicEntityDatabase } from './music-entity.database';
@@ -9,6 +10,10 @@ export class TracksDatabase
   extends MusicEntityDatabase<Track, CreateTrackDto>
   implements ITracksDatabase
 {
+  constructor(protected readonly prisma: PrismaService) {
+    super(EntityName.TRACK, prisma);
+  }
+
   async deleteByArtistId(artistId: string): Promise<void> {
     return this.getAll().then(async (tracks) => {
       for (const track of tracks) {

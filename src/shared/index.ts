@@ -6,6 +6,8 @@ export * from './interfaces/music-entity-actions.interface';
 export * from './interfaces/music-entity-service.interface';
 export * from './logger/index';
 export * from './services/music-entity.service';
+export * from './services/prisma.service';
+export * from './shared.module';
 export * from './swagger/error-responses';
 export * from './swagger/examples';
 export * from './swagger/params';

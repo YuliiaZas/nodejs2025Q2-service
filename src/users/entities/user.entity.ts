@@ -22,8 +22,8 @@ export class User {
   version: number; // integer number, increments on update
 
   @ApiPropertyOptional({ example: 1716927665136 })
-  createdAt: number; // timestamp of creation
+  createdAt: Date; // timestamp of creation
 
   @ApiPropertyOptional({ example: 1716927665136 })
-  updatedAt: number; // timestamp of last update
+  updatedAt: Date; // timestamp of last update
 }

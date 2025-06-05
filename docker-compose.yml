@@ -4,14 +4,26 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: npm run start:dev
+    # command: npm run start:dev
+    # command: >
+    #   sh -c "
+    #     npx prisma migrate deploy &&
+    #     npm run start:dev
+    #   "
+    # depends_on:
+    #   - db
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     restart: always
-    ports:
-      - ${PORT}:${PORT}
     env_file:
       - .env
+    ports:
+      - ${PORT}:${PORT}
+    environment:
+      PORT: ${PORT}
+      DATABASE_URL: ${DATABASE_URL}
+      # - DATABASE_URL=postgresql://library_user:library_user_pass@localhost:5432/home_library
     volumes:
       - ./logs:/usr/src/app/logs
       - .:/usr/src/app
@@ -24,13 +36,26 @@ services:
     build: 
       context: ./database
       dockerfile: Dockerfile
+    command: postgres -c listen_addresses='*'
     restart: always
     env_file:
       - .env
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - library-network
+    healthcheck:
+      # test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
 
 volumes:
   postgres_data:
