@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
 
-import { TracksDatabase } from 'database';
-
 import { AlbumsModule } from '@/albums';
 import { ArtistsModule } from '@/artists';
+import { TracksDatabase } from '@/database';
 import { EntityName, SharedModule, TOKEN_DATABASE } from '@/shared';
 
 import { TracksController } from './tracks.controller';
