@@ -1,15 +1,13 @@
 services:
-  app-dev:
+  app-prod:
     extends:
       file: docker-compose.share.yml
       service: app
-    build: 
+    build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
     volumes:
       - ./logs:/usr/src/app/logs
-      - .:/usr/src/app
-      - node_modules:/usr/src/app/node_modules
     networks:
       - library-network
 
@@ -26,8 +24,6 @@ volumes:
   postgres_data:
     driver: local
   logs:
-    driver: local
-  node_modules:
     driver: local
 
 networks:

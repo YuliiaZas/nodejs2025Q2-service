@@ -2,7 +2,7 @@
 /dist
 /logs
 /doc/api_0.yaml
-# .env
+.env
 .gitignore
 .git
 README.md
