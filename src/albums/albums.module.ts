@@ -2,13 +2,13 @@ import { Module } from '@nestjs/common';
 
 import { ArtistsModule } from '@/artists';
 import { AlbumsDatabase } from '@/database';
-import { EntityName, SharedModule, TOKEN_DATABASE } from '@/shared';
+import { EntityName, PrismaModule, TOKEN_DATABASE } from '@/shared';
 
 import { AlbumsController } from './albums.controller';
 import { AlbumsService } from './albums.service';
 
 @Module({
-  imports: [ArtistsModule, SharedModule],
+  imports: [ArtistsModule, PrismaModule],
   controllers: [AlbumsController],
   providers: [
     AlbumsService,
