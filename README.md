@@ -4,6 +4,7 @@
 
 - Git - [Download & Install Git](https://git-scm.com/downloads).
 - Docker - [Download & Install Docker](https://www.docker.com/get-started).
+- Prisma Postgres - [Getting started](https://www.prisma.io/docs/postgres/introduction/getting-started).
 - Node.js - [Download & Install Node.js](https://nodejs.org/en/download/) and the npm package manager.
 
 ## Downloading
@@ -94,6 +95,16 @@ To remove all unused Docker data:
 ```
 npm run docker:clean
 ```
+
+## Database
+
+The application uses PostgreSQL as the database. The database is created automatically when the application starts.
+To view the database content, you can run the following command:
+
+```
+npm run db:content
+```
+
 
 ## Generating OpenAPI documentation
 To generate OpenAPI documentation, run the following command:
