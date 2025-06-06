@@ -16,7 +16,6 @@ export * from './swagger/swagger.config';
 export * from './tokens/databases';
 export * from './types/delete-event-name.enum';
 export * from './types/entity-name.enum';
-export * from './types/get-entities-by-ids.type';
 export * from './types/music-entity.type';
 export * from './types/music-entity-name.type';
 export * from './types/swagger-response.type';

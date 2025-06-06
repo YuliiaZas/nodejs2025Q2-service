@@ -5,7 +5,6 @@ import { DeletedEvent } from '../events/delete-event';
 import { MusicEntityActions } from '../interfaces/music-entity-actions.interface';
 import { IMusicEntityService } from '../interfaces/music-entity-service.interface';
 import { DeleteEventName } from '../types/delete-event-name.enum';
-import { GetEntitiesByIdsType } from '../types/get-entities-by-ids.type';
 import { MusicEntity } from '../types/music-entity.type';
 
 @Injectable()
@@ -46,7 +45,7 @@ export abstract class MusicEntityService<
     return this.storage.update(id, updateDto as Partial<T>);
   }
 
-  async getByIds(ids: string[]): Promise<GetEntitiesByIdsType<T>> {
+  async getByIds(ids: string[]): Promise<T[]> {
     return this.storage.getByIds(ids);
   }
 

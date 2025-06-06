@@ -1,46 +1,72 @@
 import { Injectable } from '@nestjs/common';
 
-import { FavoritesStore, IFavoritesDatabase } from '@/favorites';
-import { EntityName, MusicEntityName } from '@/shared';
+import { FavoritesIds, IFavoritesDatabase } from '@/favorites';
+import { MusicEntityName, PrismaService } from '@/shared';
+
+const EMPTY_FAVORITES: FavoritesIds = {
+  artistsIds: [],
+  albumsIds: [],
+  tracksIds: [],
+};
+const SINGLETON_ID = 'singleton';
 
 @Injectable()
 export class FavoritesDatabase implements IFavoritesDatabase {
-  private readonly favorites: FavoritesStore = new Map();
+  constructor(private readonly prisma: PrismaService) {}
 
-  constructor() {
-    this.favorites.set(EntityName.ARTIST, new Set());
-    this.favorites.set(EntityName.ALBUM, new Set());
-    this.favorites.set(EntityName.TRACK, new Set());
-  }
-
-  async getAll(): Promise<FavoritesStore> {
-    return Promise.resolve(this.favorites);
+  async getAll(): Promise<FavoritesIds> {
+    return this.prisma.favorites
+      .findUnique({
+        where: { id: SINGLETON_ID },
+        select: {
+          artistsIds: true,
+          albumsIds: true,
+          tracksIds: true,
+        },
+      })
+      .then((favs) => favs ?? EMPTY_FAVORITES);
   }
 
   async addEntityId(id: string, entity: MusicEntityName): Promise<boolean> {
-    return Promise.resolve(this.favorites.get(entity)).then((set) => {
-      set.add(id);
-      return true;
-    });
+    return this.updateEntityIds(id, entity, true);
   }
 
   async removeEntityId(id: string, entity: MusicEntityName): Promise<boolean> {
-    return Promise.resolve(this.favorites.get(entity)).then((set) => {
-      return set.delete(id);
-    });
+    return this.updateEntityIds(id, entity, false);
+  }
+
+  private async updateEntityIds(
+    id: string,
+    entity: MusicEntityName,
+    isAdd: boolean,
+  ): Promise<boolean> {
+    const entityIdsName = (entity + 'sIds') as keyof FavoritesIds;
+
+    const entitiesIds: string[] =
+      (await this.prisma.favorites.findUnique({
+        where: { id: SINGLETON_ID },
+        select: { [entityIdsName]: true },
+      })?.[entityIdsName]) || [];
+
+    const updateEntitiesIds = isAdd
+      ? Array.from(new Set([...entitiesIds, id]))
+      : entitiesIds.filter((entityId) => id !== entityId);
+
+    if (!isAdd && updateEntitiesIds.length === entitiesIds.length) {
+      return false;
+    }
+
+    return this.prisma.favorites
+      .upsert({
+        where: { id: SINGLETON_ID },
+        update: { [entityIdsName]: updateEntitiesIds },
+        create: {
+          id: SINGLETON_ID,
+          ...EMPTY_FAVORITES,
+          ...{ [entityIdsName]: updateEntitiesIds },
+        },
+      })
+      .then(() => true)
+      .catch(() => false);
   }
 }
-
-// const fav = await prisma.favorites.findUnique({ where: { id: 'singleton' } });
-
-// const artists = await prisma.artist.findMany({
-//   where: { id: { in: fav.artistsIds } },
-// });
-
-// const albums = await prisma.album.findMany({
-//   where: { id: { in: fav.albumsIds } },
-// });
-
-// const tracks = await prisma.track.findMany({
-//   where: { id: { in: fav.tracksIds } },
-// });

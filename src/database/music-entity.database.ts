@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 
 import {
   EntityName,
-  GetEntitiesByIdsType,
   MusicEntity,
   MusicEntityActions,
   PrismaService,
@@ -51,17 +50,7 @@ export class MusicEntityDatabase<
       .catch(() => null);
   }
 
-  async getByIds(ids: string[]): Promise<GetEntitiesByIdsType<T>> {
-    const foundItems: T[] = await this.data.findMany({
-      where: { id: { in: ids } },
-    });
-
-    const foundIds = new Set(foundItems.map((item) => item.id));
-    const notFoundIds = ids.filter((id) => !foundIds.has(id));
-
-    return {
-      items: foundItems,
-      notFoundIds,
-    };
+  async getByIds(ids: string[]): Promise<T[]> {
+    return this.data.findMany({ where: { id: { in: ids } } });
   }
 }

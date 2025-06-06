@@ -46,7 +46,7 @@ export class FavoritesController {
     return this.favoritesService
       .addEntityId(id, EntityName.ARTIST)
       .then((artist) => {
-        if (!artist) {
+        if (artist === null) {
           throw new AppNotExistException(id, EntityName.ARTIST);
         }
         return artist;
@@ -87,7 +87,7 @@ export class FavoritesController {
     return this.favoritesService
       .addEntityId(id, EntityName.ALBUM)
       .then((album) => {
-        if (!album) {
+        if (album === null) {
           throw new AppNotExistException(id, EntityName.ALBUM);
         }
         return album;
@@ -128,7 +128,7 @@ export class FavoritesController {
     return this.favoritesService
       .addEntityId(id, EntityName.TRACK)
       .then((track) => {
-        if (!track) {
+        if (track === null) {
           throw new AppNotExistException(id, EntityName.TRACK);
         }
         return track;
