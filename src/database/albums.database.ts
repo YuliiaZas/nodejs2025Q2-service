@@ -17,7 +17,7 @@ export class AlbumsDatabase
     return this.getAll().then(async (albums) => {
       for (const album of albums) {
         if (album.artistId === artistId) {
-          await this.update({ ...album, artistId: null });
+          await this.update(album.id, { artistId: null });
         }
       }
     });

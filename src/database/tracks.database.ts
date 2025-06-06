@@ -18,7 +18,7 @@ export class TracksDatabase
     return this.getAll().then(async (tracks) => {
       for (const track of tracks) {
         if (track.artistId === artistId) {
-          await this.update({ ...track, artistId: null });
+          await this.update(track.id, { artistId: null });
         }
       }
     });
@@ -28,7 +28,7 @@ export class TracksDatabase
     return this.getAll().then(async (tracks) => {
       for (const track of tracks) {
         if (track.albumId === albumId) {
-          await this.update({ ...track, albumId: null });
+          await this.update(track.id, { albumId: null });
         }
       }
     });

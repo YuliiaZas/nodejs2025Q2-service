@@ -34,11 +34,6 @@ export abstract class MusicEntityService<
   }
 
   async deleteById(id: string): Promise<boolean> {
-    const entity = await this.getById(id);
-    if (!entity) {
-      return false;
-    }
-
     return this.storage.deleteById(id).then((result) => {
       if (result) {
         this.emitDelteEvent(id);
@@ -48,17 +43,7 @@ export abstract class MusicEntityService<
   }
 
   async updateById(id: string, updateDto: UpdateDto): Promise<T | null> {
-    const entity = await this.getById(id);
-
-    if (!entity) return null;
-    if (Object.keys(updateDto).length === 0) return entity;
-
-    const updatedEntity: T = {
-      ...entity,
-      ...updateDto,
-    };
-
-    return this.storage.update(updatedEntity);
+    return this.storage.update(id, updateDto as Partial<T>);
   }
 
   async getByIds(ids: string[]): Promise<GetEntitiesByIdsType<T>> {

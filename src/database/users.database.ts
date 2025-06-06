@@ -28,24 +28,18 @@ export class UsersDatabase implements IUsersDatabase {
       .catch(() => false);
   }
 
-  async updateUserPassword(id: string, password: string): Promise<User | null> {
-    return this.updateUserFields(id, { password });
-  }
-
-  private async updateUserFields(
+  async updateUserFields(
     id: string,
     updatedFields: Partial<User>,
   ): Promise<User | null> {
-    return this.prisma.user
-      .update({
-        where: { id },
-        data: {
-          ...updatedFields,
-          version: {
-            increment: 1,
-          },
+    return this.prisma.user.update({
+      where: { id },
+      data: {
+        ...updatedFields,
+        version: {
+          increment: 1,
         },
-      })
-      .catch(() => null);
+      },
+    });
   }
 }

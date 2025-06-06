@@ -42,13 +42,11 @@ export class MusicEntityDatabase<
       .catch(() => false);
   }
 
-  async update(musicEntity: T): Promise<T | null> {
-    const { id, ...data } = musicEntity;
-
+  async update(id: string, updatedData: Partial<T>): Promise<T | null> {
     return this.data
       .update({
         where: { id },
-        data: data,
+        data: updatedData,
       })
       .catch(() => null);
   }
