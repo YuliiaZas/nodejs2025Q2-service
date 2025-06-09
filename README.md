@@ -105,6 +105,23 @@ To view the database content, you can run the following command:
 npm run db:content
 ```
 
+This command will start the Prisma Studio interface, which allows you to view and manage the database content in a web interface using the URL `http://localhost:5555`.
+
+## Scanning for vulnerabilities
+
+To scan for vulnerabilities in the Docker images, you can use the following command:
+
+```
+npm run docker:scan:vuln
+```
+
+Also you can get quick overview of the Docker images by running:
+
+```
+npm run docker:scan
+```
+
+this will run `docker scout quickview` command to create a summary of the vulnerabilities in the image and vulnerabilities from the base image.
 
 ## Generating OpenAPI documentation
 To generate OpenAPI documentation, run the following command:

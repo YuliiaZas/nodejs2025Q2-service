@@ -15,6 +15,7 @@
     "docker:down:prod": "docker compose -f docker-compose.prod.yml down -v",
     "docker:clean": "docker system prune -af && docker volume prune -f",
     "docker:scan": "docker scout quickview",
+    "docker:scan:vuln": "docker scout cves local://nodejs2025q2-service-app-dev:latest",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
