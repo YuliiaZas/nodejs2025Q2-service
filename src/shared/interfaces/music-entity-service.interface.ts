@@ -10,5 +10,4 @@ export interface IMusicEntityService<
   getById(id: string): Promise<T | null>;
   deleteById(id: string): Promise<boolean>;
   updateById(id: string, updatedFields: UpdateDto): Promise<T | null>;
-  getByIds(ids: string[]): Promise<T[]>;
 }

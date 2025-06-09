@@ -20,15 +20,15 @@ export class FavoritesDatabase implements IFavoritesDatabase {
     });
   }
 
-  async addEntityId(id: string, entity: MusicEntityName): Promise<boolean> {
-    return this.updateEntityIds(id, entity, true);
+  async addEntity(id: string, entity: MusicEntityName): Promise<boolean> {
+    return this.updateEntity(id, entity, true);
   }
 
-  async removeEntityId(id: string, entity: MusicEntityName): Promise<boolean> {
-    return this.updateEntityIds(id, entity, false);
+  async removeEntity(id: string, entity: MusicEntityName): Promise<boolean> {
+    return this.updateEntity(id, entity, false);
   }
 
-  private async updateEntityIds(
+  private async updateEntity(
     id: string,
     entity: MusicEntityName,
     isAdd: boolean,
