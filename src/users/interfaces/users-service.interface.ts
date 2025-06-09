@@ -1,5 +1,4 @@
-import { User } from '@prisma/client';
-
+import { User } from '../entities/user.entity';
 import { IUsersDatabase } from './users-database.interface';
 
 export interface IUsersService

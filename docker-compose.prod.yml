@@ -7,7 +7,7 @@ services:
       context: .
       dockerfile: Dockerfile.prod
     volumes:
-      - ./logs:/usr/src/app/logs
+      - logs:/usr/src/app/logs
     networks:
       - library-network
 
