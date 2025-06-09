@@ -10,14 +10,43 @@ export class FavoritesDatabase implements IFavoritesDatabase {
   constructor(private readonly prisma: PrismaService) {}
 
   async getAll(): Promise<Favorites> {
-    return this.prisma.favorites.findUnique({
-      where: { id: SINGLETON_ID },
-      select: {
-        artists: true,
-        albums: true,
-        tracks: true,
-      },
-    });
+    return this.prisma.favorites
+      .findUnique({
+        where: { id: SINGLETON_ID },
+        select: {
+          artists: true,
+          albums: true,
+          tracks: true,
+        },
+      })
+      .then((favorites) => {
+        if (!favorites) {
+          return this.prisma.favorites.create({
+            data: {
+              id: SINGLETON_ID,
+              artists: { connect: [] },
+              albums: { connect: [] },
+              tracks: { connect: [] },
+            },
+            select: {
+              artists: true,
+              albums: true,
+              tracks: true,
+            },
+          });
+        }
+        return favorites;
+      })
+      .then((favorites) => {
+        if (!favorites) {
+          throw new Error('Failed to create favorites');
+        }
+        return favorites;
+      })
+      .catch((error) => {
+        console.error('Error fetching or creating favorites:', error);
+        throw new Error('Database operation failed');
+      });
   }
 
   async addEntity(id: string, entity: MusicEntityName): Promise<boolean> {
