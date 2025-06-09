@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String  @id @default(uuid())
+  login      String
+  password   String
+  version    Int     @default(1)
+  createdAt  BigInt  @default(0)
+  updatedAt  BigInt  @default(0)
+}
+
+model Artist {
+  id      String  @id @default(uuid())
+  name    String
+  grammy  Boolean 
+
+  tracks  Track[]
+  albums  Album[]
+  favorites Favorites[] @relation("FavoriteArtist")
+}
+
+model Album {
+  id        String   @id @default(uuid())
+  name      String
+  year      Int
+  artistId  String?
+
+  artist    Artist?  @relation(fields: [artistId], references: [id], onDelete: SetNull)
+  tracks    Track[]
+  favorites Favorites[] @relation("FavoriteAlbum")
+}
+
+model Track {
+  id        String  @id @default(uuid())
+  name      String
+  duration  Int
+  albumId   String?
+  artistId  String?
+
+  album     Album?   @relation(fields: [albumId], references: [id], onDelete: SetNull)
+  artist    Artist?  @relation(fields: [artistId], references: [id], onDelete: SetNull)
+  favorites Favorites[] @relation("FavoriteTrack")
+}
+
+model Favorites {
+  id          String    @id @default("singleton")
+  artists  Artist[]   @relation("FavoriteArtist")
+  albums   Album[]    @relation("FavoriteAlbum")
+  tracks   Track[]    @relation("FavoriteTrack")
+}

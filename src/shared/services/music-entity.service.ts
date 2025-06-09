@@ -5,7 +5,6 @@ import { DeletedEvent } from '../events/delete-event';
 import { MusicEntityActions } from '../interfaces/music-entity-actions.interface';
 import { IMusicEntityService } from '../interfaces/music-entity-service.interface';
 import { DeleteEventName } from '../types/delete-event-name.enum';
-import { GetEntitiesByIdsType } from '../types/get-entities-by-ids.type';
 import { MusicEntity } from '../types/music-entity.type';
 
 @Injectable()
@@ -34,11 +33,6 @@ export abstract class MusicEntityService<
   }
 
   async deleteById(id: string): Promise<boolean> {
-    const entity = await this.getById(id);
-    if (!entity) {
-      return false;
-    }
-
     return this.storage.deleteById(id).then((result) => {
       if (result) {
         this.emitDelteEvent(id);
@@ -48,21 +42,7 @@ export abstract class MusicEntityService<
   }
 
   async updateById(id: string, updateDto: UpdateDto): Promise<T | null> {
-    const entity = await this.getById(id);
-
-    if (!entity) return null;
-    if (Object.keys(updateDto).length === 0) return entity;
-
-    const updatedEntity: T = {
-      ...entity,
-      ...updateDto,
-    };
-
-    return this.storage.update(updatedEntity);
-  }
-
-  async getByIds(ids: string[]): Promise<GetEntitiesByIdsType<T>> {
-    return this.storage.getByIds(ids);
+    return this.storage.update(id, updateDto as Partial<T>);
   }
 
   private emitDelteEvent(id: string): void {

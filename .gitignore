@@ -38,3 +38,5 @@ lerna-debug.log*
 
 tmp.json
 doc/api_0.yaml
+
+/logs

@@ -1,32 +1,79 @@
 import { Injectable } from '@nestjs/common';
 
-import { FavoritesStore, IFavoritesDatabase } from '@/favorites';
-import { EntityName, MusicEntityName } from '@/shared';
+import { Favorites, FavoritesKeys, IFavoritesDatabase } from '@/favorites';
+import { MusicEntityName, PrismaService } from '@/shared';
+
+const SINGLETON_ID = 'singleton';
 
 @Injectable()
 export class FavoritesDatabase implements IFavoritesDatabase {
-  private readonly favorites: FavoritesStore = new Map();
+  constructor(private readonly prisma: PrismaService) {}
 
-  constructor() {
-    this.favorites.set(EntityName.ARTIST, new Set());
-    this.favorites.set(EntityName.ALBUM, new Set());
-    this.favorites.set(EntityName.TRACK, new Set());
+  async getAll(): Promise<Favorites> {
+    return this.prisma.favorites
+      .findUnique({
+        where: { id: SINGLETON_ID },
+        select: {
+          artists: true,
+          albums: true,
+          tracks: true,
+        },
+      })
+      .then((favorites) => {
+        if (!favorites) {
+          return this.prisma.favorites.create({
+            data: {
+              id: SINGLETON_ID,
+              artists: { connect: [] },
+              albums: { connect: [] },
+              tracks: { connect: [] },
+            },
+            select: {
+              artists: true,
+              albums: true,
+              tracks: true,
+            },
+          });
+        }
+        return favorites;
+      })
+      .then((favorites) => {
+        if (!favorites) {
+          throw new Error('Failed to create favorites');
+        }
+        return favorites;
+      })
+      .catch((error) => {
+        console.error('Error fetching or creating favorites:', error);
+        throw new Error('Database operation failed');
+      });
   }
 
-  async getAll(): Promise<FavoritesStore> {
-    return Promise.resolve(this.favorites);
+  async addEntity(id: string, entity: MusicEntityName): Promise<boolean> {
+    return this.updateEntity(id, entity, true);
   }
 
-  async addEntityId(id: string, entity: MusicEntityName): Promise<boolean> {
-    return Promise.resolve(this.favorites.get(entity)).then((set) => {
-      set.add(id);
-      return true;
-    });
+  async removeEntity(id: string, entity: MusicEntityName): Promise<boolean> {
+    return this.updateEntity(id, entity, false);
   }
 
-  async removeEntityId(id: string, entity: MusicEntityName): Promise<boolean> {
-    return Promise.resolve(this.favorites.get(entity)).then((set) => {
-      return set.delete(id);
-    });
+  private async updateEntity(
+    id: string,
+    entity: MusicEntityName,
+    isAdd: boolean,
+  ): Promise<boolean> {
+    const entityKey = (entity + 's') as keyof FavoritesKeys;
+
+    return this.prisma.favorites
+      .update({
+        where: { id: SINGLETON_ID },
+        data: {
+          [entityKey]: {
+            [isAdd ? 'connect' : 'disconnect']: { id },
+          },
+        },
+      })
+      .then(() => true)
+      .catch(() => false);
   }
 }

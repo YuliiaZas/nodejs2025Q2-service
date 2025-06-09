@@ -1,0 +1,9 @@
+/node_modules
+/dist
+/logs
+/doc/api_0.yaml
+.env
+.gitignore
+.git
+README.md
+tmp.json

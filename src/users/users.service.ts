@@ -1,8 +1,8 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 
 import { plainToInstance } from 'class-transformer';
 
-import { EntityName, TOKEN_DATABASE } from '@/shared';
+import { AppNotFoundException, EntityName, TOKEN_DATABASE } from '@/shared';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
@@ -46,14 +46,13 @@ export class UsersService implements IUsersService {
     const hashedPassword = await this.passwordService.hashPassword(password);
 
     return this.storage
-      .updateUserPassword(id, hashedPassword)
-      .catch((error) => {
-        if (error instanceof NotFoundException) {
-          throw new NotFoundException(`User with id ${id} not found`);
+      .updateUserFields(id, { password: hashedPassword })
+      .then((user) => {
+        if (!user) {
+          throw new AppNotFoundException(id, EntityName.USER);
         }
-        throw error;
-      })
-      .then((user) => plainToInstance(User, user));
+        return plainToInstance(User, user);
+      });
   }
 
   async isUserPasswordCorrect(

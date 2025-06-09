@@ -1,12 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 import { ArtistsService } from '@/artists';
 import {
   AppNotExistException,
-  DeletedEvent,
   DeleteEventName,
   EntityName,
+  MusicEntityActions,
   MusicEntityService,
   TOKEN_DATABASE,
 } from '@/shared';
@@ -14,7 +14,6 @@ import {
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { Album } from './entities/album.entity';
-import type { IAlbumsDatabase } from './interfaces/albums-database.interface';
 
 @Injectable()
 export class AlbumsService extends MusicEntityService<
@@ -24,16 +23,11 @@ export class AlbumsService extends MusicEntityService<
 > {
   constructor(
     @Inject(TOKEN_DATABASE[EntityName.ALBUM])
-    protected readonly storage: IAlbumsDatabase,
+    protected readonly storage: MusicEntityActions<Album, CreateAlbumDto>,
     protected readonly eventEmitter: EventEmitter2,
     private readonly artistService: ArtistsService,
   ) {
     super(storage, eventEmitter, DeleteEventName.ALBUM);
-  }
-
-  @OnEvent(DeleteEventName.ARTIST)
-  async deleteArtistFromAlbums({ id }: DeletedEvent): Promise<void> {
-    await this.storage.deleteByArtistId(id);
   }
 
   async add(createDto: CreateAlbumDto): Promise<Album> {

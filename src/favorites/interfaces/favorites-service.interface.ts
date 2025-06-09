@@ -5,9 +5,6 @@ import { Favorites } from '../entities/favorites.entity';
 
 export interface IFavoritesService {
   getAll(): Promise<Favorites>;
-  addEntityId(
-    id: string,
-    entity: MusicEntityName,
-  ): Promise<AddedFavorite | null>;
-  removeEntityId(id: string, entity: MusicEntityName): Promise<boolean>;
+  addEntity(id: string, entity: MusicEntityName): Promise<AddedFavorite | null>;
+  removeEntity(id: string, entity: MusicEntityName): Promise<boolean>;
 }

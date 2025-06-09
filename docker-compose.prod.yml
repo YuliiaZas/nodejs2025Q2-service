@@ -1,0 +1,31 @@
+services:
+  app-prod:
+    extends:
+      file: docker-compose.share.yml
+      service: app
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    volumes:
+      - logs:/usr/src/app/logs
+    networks:
+      - library-network
+
+  db:
+    extends:
+      file: docker-compose.share.yml
+      service: db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - library-network
+
+volumes:
+  postgres_data:
+    driver: local
+  logs:
+    driver: local
+
+networks:
+  library-network:
+    driver: bridge

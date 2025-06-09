@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
 
-import { randomUUID } from 'node:crypto';
-
 import {
-  GetEntitiesByIdsType,
+  EntityName,
   MusicEntity,
   MusicEntityActions,
+  PrismaService,
 } from '@/shared/';
 
 @Injectable()
@@ -14,52 +13,40 @@ export class MusicEntityDatabase<
   CreateDto extends Partial<Omit<T, 'id'>> = Partial<Omit<T, 'id'>>,
 > implements MusicEntityActions<T, CreateDto>
 {
-  private musicEntities: Map<string, T> = new Map();
+  constructor(
+    protected readonly table: EntityName,
+    protected readonly prisma: PrismaService,
+  ) {}
+
+  private get data() {
+    return this.prisma[this.table] as any;
+  }
 
   async add(musicEntityParams: CreateDto): Promise<T> {
-    const musicEntity: T = {
-      id: randomUUID(),
-      ...musicEntityParams,
-    } as unknown as T;
-
-    this.musicEntities.set(musicEntity.id, musicEntity);
-
-    return Promise.resolve(musicEntity);
+    return this.data.create({ data: musicEntityParams });
   }
 
   async getAll(): Promise<T[]> {
-    return Promise.resolve(Array.from(this.musicEntities.values()));
+    return this.data.findMany();
   }
 
   async getById(id: string): Promise<T | null> {
-    return Promise.resolve(this.musicEntities.get(id));
+    return this.data.findUnique({ where: { id } });
   }
 
   async deleteById(id: string): Promise<boolean> {
-    return Promise.resolve(this.musicEntities.delete(id));
+    return this.data
+      .delete({ where: { id } })
+      .then(() => true)
+      .catch(() => false);
   }
 
-  async update(musicEntity: T): Promise<T | null> {
-    return Promise.resolve(
-      this.musicEntities.set(musicEntity.id, musicEntity),
-    ).then(() => musicEntity);
-  }
-
-  async getByIds(ids: string[]): Promise<GetEntitiesByIdsType<T>> {
-    const result: GetEntitiesByIdsType<T> = {
-      items: [],
-      notFoundIds: [],
-    };
-
-    ids.forEach((id) => {
-      const musicEntity = this.musicEntities.get(id);
-      if (musicEntity) {
-        result.items.push(musicEntity);
-      } else {
-        result.notFoundIds.push(id);
-      }
-    });
-
-    return Promise.resolve(result);
+  async update(id: string, updatedData: Partial<T>): Promise<T | null> {
+    return this.data
+      .update({
+        where: { id },
+        data: updatedData,
+      })
+      .catch(() => null);
   }
 }

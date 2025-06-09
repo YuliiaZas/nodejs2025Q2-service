@@ -6,5 +6,8 @@ export interface IUsersDatabase {
   getUsers(): Promise<User[]>;
   getUser(id: string): Promise<User | null>;
   deleteUser(id: string): Promise<boolean>;
-  updateUserPassword(id: string, password: string): Promise<User | null>;
+  updateUserFields(
+    id: string,
+    updatedFields: Partial<User>,
+  ): Promise<User | null>;
 }

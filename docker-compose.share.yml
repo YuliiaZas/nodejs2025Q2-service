@@ -1,0 +1,36 @@
+services:
+  app:
+    container_name: nestjs-app
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+    restart: always
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}?schema=public
+    ports:
+      - ${PORT}:${PORT}
+      - 5555:5555
+
+  db:
+    container_name: postgress-db
+    build: 
+      context: .
+      dockerfile: Dockerfile.db
+    command: postgres -c listen_addresses='*'
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"

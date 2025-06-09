@@ -1,6 +1,6 @@
 import { ApiHideProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-import { Exclude } from 'class-transformer';
+import { Exclude, Transform } from 'class-transformer';
 
 import { EntityName, getIdExample } from '@/shared';
 
@@ -22,8 +22,10 @@ export class User {
   version: number; // integer number, increments on update
 
   @ApiPropertyOptional({ example: 1716927665136 })
-  createdAt: number; // timestamp of creation
+  @Transform(({ value }) => Number(value))
+  createdAt: bigint; // timestamp of creation
 
   @ApiPropertyOptional({ example: 1716927665136 })
-  updatedAt: number; // timestamp of last update
+  @Transform(({ value }) => Number(value))
+  updatedAt: bigint; // timestamp of last update
 }
