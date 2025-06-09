@@ -49,8 +49,4 @@ export class MusicEntityDatabase<
       })
       .catch(() => null);
   }
-
-  async getByIds(ids: string[]): Promise<T[]> {
-    return this.data.findMany({ where: { id: { in: ids } } });
-  }
 }

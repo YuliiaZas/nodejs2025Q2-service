@@ -23,6 +23,7 @@ model Artist {
 
   tracks  Track[]
   albums  Album[]
+  favorites Favorites[] @relation("FavoriteArtist")
 }
 
 model Album {
@@ -31,8 +32,9 @@ model Album {
   year      Int
   artistId  String?
 
-  artist    Artist?  @relation(fields: [artistId], references: [id])
+  artist    Artist?  @relation(fields: [artistId], references: [id], onDelete: SetNull)
   tracks    Track[]
+  favorites Favorites[] @relation("FavoriteAlbum")
 }
 
 model Track {
@@ -42,13 +44,14 @@ model Track {
   albumId   String?
   artistId  String?
 
-  album     Album?   @relation(fields: [albumId], references: [id])
-  artist    Artist?  @relation(fields: [artistId], references: [id])
+  album     Album?   @relation(fields: [albumId], references: [id], onDelete: SetNull)
+  artist    Artist?  @relation(fields: [artistId], references: [id], onDelete: SetNull)
+  favorites Favorites[] @relation("FavoriteTrack")
 }
 
 model Favorites {
   id          String    @id @default("singleton")
-  artistsIds  String[]  @default([])
-  albumsIds   String[]  @default([])
-  tracksIds   String[]  @default([])
+  artists  Artist[]   @relation("FavoriteArtist")
+  albums   Album[]    @relation("FavoriteAlbum")
+  tracks   Track[]    @relation("FavoriteTrack")
 }

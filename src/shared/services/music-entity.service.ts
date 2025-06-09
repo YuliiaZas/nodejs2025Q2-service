@@ -45,10 +45,6 @@ export abstract class MusicEntityService<
     return this.storage.update(id, updateDto as Partial<T>);
   }
 
-  async getByIds(ids: string[]): Promise<T[]> {
-    return this.storage.getByIds(ids);
-  }
-
   private emitDelteEvent(id: string): void {
     this.eventEmitter.emit(this.deleteEventType, new DeletedEvent(id));
   }

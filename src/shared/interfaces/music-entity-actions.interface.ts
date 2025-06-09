@@ -9,5 +9,4 @@ export interface MusicEntityActions<
   getById(id: string): Promise<T | null>;
   deleteById(id: string): Promise<boolean>;
   update(id: string, entity: Partial<T>): Promise<T | null>;
-  getByIds(ids: string[]): Promise<T[]>;
 }
