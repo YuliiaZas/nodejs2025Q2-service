@@ -1,9 +1,9 @@
 import { MusicEntityName } from '@/shared';
 
-import { FavoritesIds } from './favorites-ids.interface';
+import { Favorites } from '../entities/favorites.entity';
 
 export interface IFavoritesDatabase {
-  getAll(): Promise<FavoritesIds>;
+  getAll(): Promise<Favorites>;
   addEntityId(id: string, entity: MusicEntityName): Promise<boolean>;
   removeEntityId(id: string, entity: MusicEntityName): Promise<boolean>;
 }

@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 
-import { Album, AlbumsService } from '@/albums';
-import { Artist, ArtistsService } from '@/artists';
+import { AlbumsService } from '@/albums';
+import { ArtistsService } from '@/artists';
 import {
   DeletedEvent,
   DeleteEventName,
@@ -11,14 +11,13 @@ import {
   TOKEN_DATABASE,
   validateMusicEntityName,
 } from '@/shared';
-import { Track, TracksService } from '@/tracks';
+import { TracksService } from '@/tracks';
 
 import { AddedFavorite } from './entities/added-favorite.entity';
 import { Favorites } from './entities/favorites.entity';
 import { IFavoritesDatabase } from './interfaces/favorites-database.interface';
 import { IFavoritesService } from './interfaces/favorites-service.interface';
 
-type AllEntities = [Artist[], Album[], Track[]];
 @Injectable()
 export class FavoritesService implements IFavoritesService {
   constructor(
@@ -45,15 +44,7 @@ export class FavoritesService implements IFavoritesService {
   }
 
   async getAll(): Promise<Favorites> {
-    const favs = await this.storage.getAll();
-
-    return this.formatResult(
-      await Promise.all([
-        this.artistsService.getByIds(favs.artistsIds),
-        this.albumsService.getByIds(favs.albumsIds),
-        this.tracksService.getByIds(favs.tracksIds),
-      ]),
-    );
+    return this.storage.getAll();
   }
 
   async addEntityId(
@@ -91,17 +82,5 @@ export class FavoritesService implements IFavoritesService {
       default:
         return this.tracksService;
     }
-  }
-
-  private formatResult([
-    artistsRes,
-    albumsRes,
-    tracksRes,
-  ]: AllEntities): Favorites {
-    return {
-      artists: artistsRes,
-      albums: albumsRes,
-      tracks: tracksRes,
-    };
   }
 }
