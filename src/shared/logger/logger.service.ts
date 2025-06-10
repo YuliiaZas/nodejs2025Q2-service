@@ -13,6 +13,7 @@ import { join } from 'node:path';
 const rootDir = process.cwd();
 const logDir = join(rootDir, 'logs');
 const logFilePath = join(logDir, 'app.log');
+const errorLogFilePath = join(logDir, 'error.log');
 
 const BYTES_IN_KB = 1024;
 const MAX_LOG_SIZE_KB = Number(process.env.LOG_FILE_MAX_SIZE_KB || 1);
@@ -24,16 +25,26 @@ type LogLevel = (typeof LEVELS)[number];
 @Injectable()
 export class LoggingService extends ConsoleLogger {
   private logStream = this.initStream();
+  private errorLogStream = this.initStream(true);
   private isFileRotating = false;
 
   constructor() {
     super();
 
+    this.options.logLevels = LEVELS.slice(0, LOG_LEVEL_INDEX + 1);
+
     process.on('exit', () => {
       this.logStream.end();
+      this.errorLogStream.end();
     });
 
-    this.options.logLevels = LEVELS.slice(0, LOG_LEVEL_INDEX + 1);
+    process.on('uncaughtException', (error) => {
+      this.error(`Uncaught Exception:, ${error.message}`, error.stack);
+    });
+
+    process.on('unhandledRejection', (reason, promise) => {
+      this.error(`Unhandled Rejection at: ${promise}, reason: ${reason}`);
+    });
   }
 
   log(message: string, data?: any) {
@@ -59,11 +70,18 @@ export class LoggingService extends ConsoleLogger {
     this.writeLogToFile('debug', message, info);
   }
 
-  private initStream(): WriteStream {
+  private initStream(isError = false): WriteStream {
     if (!existsSync(logDir)) {
       mkdirSync(logDir, { recursive: true });
     }
-    return createWriteStream(logFilePath, { flags: 'a' });
+    return createWriteStream(isError ? errorLogFilePath : logFilePath, {
+      flags: 'a',
+    });
+  }
+
+  private updateStream(isError = false): void {
+    const newStream = this.initStream(isError);
+    isError ? (this.errorLogStream = newStream) : (this.logStream = newStream);
   }
 
   private writeLogToFile(
@@ -80,13 +98,21 @@ export class LoggingService extends ConsoleLogger {
       return;
     }
 
-    this.rotateFileIfNeeded(() => {
+    this.rotateFileIfNeeded(() =>
       this.logStream.write(formattedMessage, (err) => {
-        if (err) {
-          super.error('Write error:', err);
-        }
-      });
-    });
+        if (err) super.error('Log write error:', err);
+      }),
+    );
+
+    if (level === 'error') {
+      this.rotateFileIfNeeded(
+        () =>
+          this.errorLogStream.write(formattedMessage, (err) => {
+            if (err) super.error('Error log write error:', err);
+          }),
+        true,
+      );
+    }
   }
 
   private formatMessageForFile(
@@ -107,9 +133,12 @@ export class LoggingService extends ConsoleLogger {
     return `[${time}] [${level.toUpperCase()}] ${formattedMessage}\n`;
   }
 
-  private rotateFileIfNeeded(callback: () => void): void {
+  private rotateFileIfNeeded(callback: () => void, isError = false): void {
+    const currentLogFilePath = isError ? errorLogFilePath : logFilePath;
+    const currentLogStream = isError ? this.errorLogStream : this.logStream;
+
     try {
-      const stats = statSync(logFilePath);
+      const stats = statSync(currentLogFilePath);
       const maxSizeInBytes = MAX_LOG_SIZE_KB * BYTES_IN_KB;
 
       if (stats.size >= maxSizeInBytes) {
@@ -117,13 +146,15 @@ export class LoggingService extends ConsoleLogger {
 
         const rotatedLogFilePath = this.getFileName();
 
-        this.logStream.end(() => {
-          renameSync(logFilePath, rotatedLogFilePath);
+        currentLogStream.end(() => {
+          renameSync(currentLogFilePath, rotatedLogFilePath);
 
-          this.logStream = createWriteStream(logFilePath, { flags: 'a' });
+          this.updateStream(isError);
           this.isFileRotating = false;
 
-          super.log(`Log file rotated: ${rotatedLogFilePath}`);
+          super.log(
+            `${isError ? 'Error ' : ''}Log file rotated: ${rotatedLogFilePath}`,
+          );
 
           callback();
         });
