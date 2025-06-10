@@ -3,7 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common/pipes/validation.pipe';
 import { SwaggerModule } from '@nestjs/swagger';
 
-import { log } from '@/shared';
+import { LoggerService } from '@/shared';
 
 import { AppModule } from './app.module';
 import { createSwaggerDocument } from './shared/swagger/swagger.config';
@@ -24,8 +24,11 @@ async function bootstrap() {
   const document = createSwaggerDocument(app);
   SwaggerModule.setup('doc', app, document);
 
-  await app.listen(process.env.PORT || 4000);
-
-  log(`Application started at port ${process.env.PORT || 4000}`);
+  await app.listen(process.env.PORT || 4000, () => {
+    new LoggerService().info(
+      `Application started at port ${process.env.PORT || 4000}`,
+    );
+  });
 }
+
 bootstrap();

@@ -1,7 +1,14 @@
 import { APP_INTERCEPTOR } from '@nestjs/core';
 
-import { ClassSerializerInterceptor, Module } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+} from '@nestjs/common';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+
+import { LoggerMiddleware, LoggerService } from '@/shared';
 
 import { AlbumsModule } from './albums/albums.module';
 import { AppService } from './app.service';
@@ -21,10 +28,15 @@ import { UsersModule } from './users/users.module';
   ],
   providers: [
     AppService,
+    LoggerService,
     {
       provide: APP_INTERCEPTOR,
       useClass: ClassSerializerInterceptor,
     },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}
