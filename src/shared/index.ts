@@ -5,7 +5,6 @@ export * from './exseptions/not-found.exseption';
 export * from './interfaces/music-entity-actions.interface';
 export * from './interfaces/music-entity-service.interface';
 export * from './logger/index';
-export * from './logger/index';
 export * from './prisma/prisma.module';
 export * from './prisma/prisma.service';
 export * from './services/music-entity.service';

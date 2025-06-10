@@ -3,23 +3,40 @@ import { Injectable, NestMiddleware } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
 
 import { maskSensitiveFields } from '../utils/mask-sensitive-fields';
-import { LoggerService } from './logger.service';
+import { LoggingService } from './logger.service';
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
-  constructor(private logger: LoggerService) {}
+  constructor(private logger: LoggingService) {}
 
   use(req: Request, res: Response, next: NextFunction) {
-    const { method, originalUrl, query, body } = req;
     const startTime = Date.now();
+    const { method, originalUrl, query, body } = req;
+    let responseBody: string;
+
+    const originalSend = res.send.bind(res);
+    res.send = (body: any) => {
+      responseBody = maskSensitiveFields(body);
+      return originalSend(body);
+    };
 
     res.on('finish', () => {
-      this.logger.info(`Request: ${method} ${originalUrl}`, {
+      this.logger.log(`Request: ${method} ${originalUrl}`, {
         query,
         body: maskSensitiveFields(body),
         statusCode: res.statusCode,
         durationMs: Date.now() - startTime,
       });
+      if (responseBody) {
+        this.logger.debug(`Response Body: ${responseBody}`);
+      }
+    });
+
+    res.on('error', (error) => {
+      this.logger.error(
+        `Error during request: ${method} ${originalUrl}: ${error.message}`,
+        error.stack,
+      );
     });
 
     next();

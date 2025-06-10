@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 
-import { LoggerMiddleware, LoggerService } from '@/shared';
+import { LoggerMiddleware, LoggerModule } from '@/shared';
 
 import { AlbumsModule } from './albums/albums.module';
 import { AppService } from './app.service';
@@ -19,6 +19,7 @@ import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
+    LoggerModule,
     EventEmitterModule.forRoot(),
     UsersModule,
     ArtistsModule,
@@ -28,7 +29,6 @@ import { UsersModule } from './users/users.module';
   ],
   providers: [
     AppService,
-    LoggerService,
     {
       provide: APP_INTERCEPTOR,
       useClass: ClassSerializerInterceptor,
