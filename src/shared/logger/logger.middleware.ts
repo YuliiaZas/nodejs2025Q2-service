@@ -30,7 +30,7 @@ export class LoggerMiddleware implements NestMiddleware {
         },
       });
       if (responseBody) {
-        this.logger.debug(`Response Body: ${responseBody}`);
+        this.logger.debug('Response Body:', { info: responseBody });
       }
     });
 

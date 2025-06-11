@@ -24,6 +24,22 @@ export function Api400BadRequestResponse(details: string[] = []) {
   });
 }
 
+export function Api401UnauthorizedResponse(message?: string) {
+  const defaultMesage =
+    'Unauthorized. The user is not authenticated or the token is invalid.';
+  return ApiResponse({
+    status: 401,
+    description: message ?? defaultMesage,
+    schema: {
+      example: {
+        statusCode: 401,
+        message: message ?? defaultMesage,
+        error: 'Unauthorized',
+      },
+    },
+  });
+}
+
 export function Api403ForbiddenResponse(message: string) {
   return ApiResponse({
     status: 403,
