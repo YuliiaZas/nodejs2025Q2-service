@@ -50,8 +50,8 @@ export class AuthService {
 
   private async getTokens(user: User): Promise<AuthResponse> {
     const payload = {
+      userId: user.id,
       login: user.login,
-      id: user.id,
     };
 
     return {
