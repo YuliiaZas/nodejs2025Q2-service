@@ -22,10 +22,12 @@ export class LoggerMiddleware implements NestMiddleware {
 
     res.on('finish', () => {
       this.logger.log(`Request: ${method} ${originalUrl}`, {
-        query,
-        body: maskSensitiveFields(body),
-        statusCode: res.statusCode,
-        durationMs: Date.now() - startTime,
+        info: {
+          query,
+          body: maskSensitiveFields(body),
+          statusCode: res.statusCode,
+          durationMs: Date.now() - startTime,
+        },
       });
       if (responseBody) {
         this.logger.debug(`Response Body: ${responseBody}`);

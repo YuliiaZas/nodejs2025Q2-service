@@ -21,6 +21,7 @@ const LOG_LEVEL_INDEX = Number(process.env.LOG_LEVEL_INDEX) || 2;
 const LEVELS = ['error', 'warn', 'log', 'debug', 'verbose'] as const;
 
 type LogLevel = (typeof LEVELS)[number];
+type LogInfo = { info?: Record<string, any> | string; logContext?: string };
 
 @Injectable()
 export class LoggingService extends ConsoleLogger {
@@ -47,17 +48,12 @@ export class LoggingService extends ConsoleLogger {
     });
   }
 
-  log(message: string, data?: any) {
-    data ? super.log(message, data) : super.log(message);
-    this.writeLogToFile('log', message, {
-      ...(typeof data === 'string' && { context: data }),
-      ...(data && typeof data !== 'string' && { info: data }),
-    });
+  log(message: string, data?: string | LogInfo | object) {
+    this.callLogMethod('log', message, data);
   }
 
-  warn(message: string) {
-    super.warn(message);
-    this.writeLogToFile('warn', message);
+  warn(message: string, data?: string | LogInfo | object) {
+    this.callLogMethod('warn', message, data);
   }
 
   error(message: string, stack?: string) {
@@ -65,9 +61,33 @@ export class LoggingService extends ConsoleLogger {
     this.writeLogToFile('error', message, { info: stack });
   }
 
-  debug(message: string, info?: any) {
-    info ? super.debug(message, info) : super.debug(message);
-    this.writeLogToFile('debug', message, info);
+  debug(message: string, data?: string | LogInfo | object) {
+    this.callLogMethod('debug', message, data);
+  }
+
+  verbose(message: string, data?: string | LogInfo | object) {
+    this.callLogMethod('verbose', message, data);
+  }
+
+  private callLogMethod(
+    method: LogLevel,
+    message: string,
+    data?: string | LogInfo | object,
+  ) {
+    if (!data) {
+      super[method](message);
+      this.writeLogToFile(method, message);
+      return;
+    } else if (typeof data === 'string') {
+      super[method](message, data);
+      this.writeLogToFile(method, message, { logContext: data });
+    } else {
+      const logContext = data['logContext'] || '';
+      const info = data['info'] || data;
+
+      super[method](message, info, logContext);
+      this.writeLogToFile(method, message, data);
+    }
   }
 
   private initStream(isError = false): WriteStream {
@@ -87,7 +107,7 @@ export class LoggingService extends ConsoleLogger {
   private writeLogToFile(
     level: LogLevel,
     message: string,
-    data?: { info?: Record<string, any> | string; context?: string },
+    data?: LogInfo,
   ): void {
     if (!this.isLevelEnabled(level)) return;
 
@@ -118,7 +138,7 @@ export class LoggingService extends ConsoleLogger {
   private formatMessageForFile(
     level: LogLevel,
     message: string,
-    data?: { info?: Record<string, any> | string; context?: string },
+    data?: LogInfo,
   ): string {
     const time = new Date()
       .toISOString()
@@ -126,7 +146,7 @@ export class LoggingService extends ConsoleLogger {
       .replace('Z', ' UTC');
 
     const formattedMessage =
-      this.stringifyContext(data?.context) +
+      this.stringifyContext(data?.logContext) +
       message +
       this.stringifyInfo(data?.info);
 

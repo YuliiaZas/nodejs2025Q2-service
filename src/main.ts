@@ -6,12 +6,15 @@ import { SwaggerModule } from '@nestjs/swagger';
 import { LoggingService } from '@/shared';
 
 import { AppModule } from './app.module';
+import { GlobalExceptionFilter } from './shared/exseptions/global-exception.filter';
 import { createSwaggerDocument } from './shared/swagger/swagger.config';
 
 import 'dotenv/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.useLogger(app.get(LoggingService));
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -20,6 +23,8 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
+  app.useGlobalFilters(new GlobalExceptionFilter(app.get(LoggingService)));
 
   const document = createSwaggerDocument(app);
   SwaggerModule.setup('doc', app, document);
