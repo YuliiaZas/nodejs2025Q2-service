@@ -3,6 +3,7 @@ import {
   ClassSerializerInterceptor,
   Controller,
   ForbiddenException,
+  HttpCode,
   Post,
   UseGuards,
   UseInterceptors,
@@ -71,21 +72,22 @@ export class AuthController {
   }
 
   @Post('refresh')
+  @Public()
   @UseGuards(AuthRefreshGuard)
+  @HttpCode(200)
   @ApiOperation({
     summary: 'Refresh user session',
     description:
       'This endpoint allows a user to refresh their session using a refresh token.',
   })
   @Api200OkResponse('Tokens', AuthResponse, true, true)
-  @Api400BadRequestResponse(['refreshToken must be a jwt string'])
-  @Api401UnauthorizedResponse('Refresh token is required')
+  @Api401UnauthorizedResponse('Refresh token not provided')
   @Api403ForbiddenResponse('Refresh token is invalid or expired')
   async refresh(
     @Body() refreshDto: RefreshDto,
     @GetCurrentUserId() id: string,
   ): Promise<AuthResponse | null> {
-    return this.authService.refresh(id).then((res) => {
+    return this.authService.refresh(refreshDto, id).then((res) => {
       if (!res)
         throw new ForbiddenException('Refresh token is invalid or expired');
       return res;

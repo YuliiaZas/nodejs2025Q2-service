@@ -4,6 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto, User } from '@/users';
 import { UsersService } from '@/users/users.service';
 
+import { RefreshDto } from './dto/refresh.dto';
 import { AuthResponse } from './interfaces/auth-response.interface';
 import { JwtPayload } from './interfaces/jwt-payload.type';
 
@@ -27,7 +28,20 @@ export class AuthService {
     return this.getTokens(user);
   }
 
-  async refresh(id: string): Promise<AuthResponse | null> {
+  async refresh(
+    refreshDto: RefreshDto,
+    id?: string,
+  ): Promise<AuthResponse | null> {
+    if (!id) {
+      const payload = await this.jwtService.verifyAsync(
+        refreshDto.refreshToken,
+        {
+          secret: process.env.JWT_SECRET_REFRESH_KEY,
+        },
+      );
+      id = payload.userId;
+    }
+
     const user = await this.usersService.getUser(id);
     if (!user) {
       return null;

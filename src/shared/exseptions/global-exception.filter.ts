@@ -2,7 +2,6 @@ import { BaseExceptionFilter } from '@nestjs/core';
 
 import {
   ArgumentsHost,
-  BadRequestException,
   Catch,
   ExceptionFilter,
   HttpException,
@@ -44,56 +43,25 @@ export class GlobalExceptionFilter<T>
       responseBody['error'] || responseBody['name'] || 'Internal Server Error';
 
     if (statusCode >= HttpStatus.INTERNAL_SERVER_ERROR) {
+      // This logs only uncaught exceptions
       this.logger.error(
         `Exception during request ${method} ${url}`,
         (exception as any).stack || message,
       );
     } else {
+      // This logs all other exceptions, including BadRequestException
+      // which are not considered as errors. Available only in verbose log level.
       this.logger.verbose(
         `Exception during request ${method} ${url}\n${(exception as any).stack || message}`,
       );
     }
 
-    const responseObject: ResponseObject = this.getCustomResponseObject(
-      exception,
-      url,
-      method,
-      message,
-    ) || {
+    const responseObject: ResponseObject = {
       message,
       error,
       statusCode,
     };
 
     response.status(responseObject.statusCode).json(responseObject);
-  }
-
-  getCustomResponseObject(
-    exception: T,
-    url: string,
-    method: string,
-    message: unknown,
-  ): null | ResponseObject {
-    if (
-      exception instanceof BadRequestException &&
-      url === '/auth/refresh' &&
-      method === 'POST'
-    ) {
-      const isMissingToken =
-        Array.isArray(message) &&
-        message.includes('refreshToken should not be empty');
-
-      if (isMissingToken) {
-        this.logger.verbose(
-          `Type of exeption was changed to UnauthorizedException for ${method} ${url}`,
-        );
-        return {
-          message: 'Refresh token is required',
-          error: 'Unauthorized',
-          statusCode: HttpStatus.UNAUTHORIZED,
-        };
-      }
-    }
-    return null;
   }
 }

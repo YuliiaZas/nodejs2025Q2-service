@@ -3,6 +3,7 @@ import {
   ExecutionContext,
   ForbiddenException,
   Injectable,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
@@ -13,6 +14,10 @@ export class AuthRefreshGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const refreshToken = request.body.refreshToken;
+
+    if (!refreshToken) {
+      throw new UnauthorizedException('Refresh token not provided');
+    }
 
     try {
       await this.jwtService.verifyAsync(refreshToken, {
