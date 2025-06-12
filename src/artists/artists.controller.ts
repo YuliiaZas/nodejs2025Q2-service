@@ -8,13 +8,14 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 
 import {
   Api200OkResponse,
   Api201CreatedResponse,
   Api204NoContentResponse,
   Api400BadRequestResponse,
+  Api401UnauthorizedResponse,
   Api404NotFoundResponse,
   ApiIdParams,
   AppNotFoundException,
@@ -30,6 +31,7 @@ import { Artist } from './entities/artist.entity';
 const ENTITY_NAME = EntityName.ARTIST;
 
 @Controller('artist')
+@ApiBearerAuth('access-token')
 export class ArtistsController {
   constructor(private readonly artistsService: ArtistsService) {}
 
@@ -44,6 +46,7 @@ export class ArtistsController {
     'name should not be empty',
     'grammy must be a boolean value',
   ])
+  @Api401UnauthorizedResponse()
   async addArtist(@Body() createArtistDto: CreateArtistDto): Promise<Artist> {
     return this.artistsService.add(createArtistDto);
   }
@@ -54,6 +57,7 @@ export class ArtistsController {
     description: 'This endpoint retrieves a list of all artists.',
   })
   @Api200OkResponse(ENTITY_NAME, [Artist])
+  @Api401UnauthorizedResponse()
   async getArtists(): Promise<Artist[]> {
     return this.artistsService.getAll();
   }
@@ -66,6 +70,7 @@ export class ArtistsController {
   @ApiIdParams(ENTITY_NAME)
   @Api200OkResponse(ENTITY_NAME, Artist)
   @Api400BadRequestResponse()
+  @Api401UnauthorizedResponse()
   @Api404NotFoundResponse(ENTITY_NAME)
   async getArtist(@Param() { id }: IdDto): Promise<Artist> {
     return this.artistsService.getById(id).then((artist) => {
@@ -82,6 +87,7 @@ export class ArtistsController {
   @ApiIdParams(ENTITY_NAME)
   @Api200OkResponse('The user password', Artist, false, true)
   @Api400BadRequestResponse()
+  @Api401UnauthorizedResponse()
   @Api404NotFoundResponse(ENTITY_NAME)
   async updateArtist(
     @Param() { id }: IdDto,
@@ -104,6 +110,7 @@ export class ArtistsController {
   @ApiIdParams(ENTITY_NAME)
   @Api204NoContentResponse(ENTITY_NAME)
   @Api400BadRequestResponse()
+  @Api401UnauthorizedResponse()
   @Api404NotFoundResponse(ENTITY_NAME)
   async deleteArtist(@Param() { id }: IdDto): Promise<void> {
     return this.artistsService.deleteById(id).then((deleted) => {

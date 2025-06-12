@@ -28,7 +28,9 @@ export class AuthGuard implements CanActivate {
     const token = this.extractTokenFromHeader(request);
 
     if (!token) {
-      throw new UnauthorizedException('Token not found');
+      throw new UnauthorizedException(
+        'Unauthorized. The user is not authenticated or the token is invalid.',
+      );
     }
 
     try {
@@ -39,7 +41,9 @@ export class AuthGuard implements CanActivate {
 
       return true;
     } catch {
-      throw new UnauthorizedException('Invalid token');
+      throw new UnauthorizedException(
+        'Unauthorized. The user is not authenticated or the token is invalid.',
+      );
     }
   }
 

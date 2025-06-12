@@ -53,6 +53,7 @@ export class AuthController {
 
   @Post('login')
   @Public()
+  @HttpCode(200)
   @ApiOperation({
     summary: 'Log in an existing user',
     description:
