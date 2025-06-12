@@ -1,11 +1,12 @@
 import { Controller, Delete, Get, HttpCode, Param, Post } from '@nestjs/common';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 
 import {
   Api200OkResponse,
   Api201CreatedResponse,
   Api204NoContentResponse,
   Api400BadRequestResponse,
+  Api401UnauthorizedResponse,
   Api404NotFoundResponse,
   Api422NotExistResponse,
   ApiIdParams,
@@ -20,6 +21,7 @@ import { Favorites } from './entities/favorites.entity';
 import { FavoritesService } from './favorites.service';
 
 @Controller('favs')
+@ApiBearerAuth('access-token')
 export class FavoritesController {
   constructor(private readonly favoritesService: FavoritesService) {}
 
@@ -29,6 +31,7 @@ export class FavoritesController {
     description: 'This endpoint retrieves all the favorites.',
   })
   @Api200OkResponse('The favorites', Favorites)
+  @Api401UnauthorizedResponse()
   async getAllFavorites(): Promise<Favorites> {
     return this.favoritesService.getAll();
   }
@@ -41,6 +44,7 @@ export class FavoritesController {
   @ApiIdParams(EntityName.ARTIST)
   @Api201CreatedResponse(EntityName.ARTIST, AddedFavorite, true)
   @Api400BadRequestResponse()
+  @Api401UnauthorizedResponse()
   @Api422NotExistResponse(EntityName.ARTIST)
   async addArtistToFavorites(@Param() { id }: IdDto): Promise<AddedFavorite> {
     return this.favoritesService
@@ -60,8 +64,9 @@ export class FavoritesController {
     description: 'This endpoint removes a artist from the favorites.',
   })
   @ApiIdParams(EntityName.ARTIST)
-  @Api400BadRequestResponse()
   @Api204NoContentResponse(EntityName.ARTIST, true)
+  @Api400BadRequestResponse()
+  @Api401UnauthorizedResponse()
   @Api404NotFoundResponse(EntityName.ARTIST, true)
   async removeArtistFromFavorites(@Param() { id }: IdDto): Promise<void> {
     return this.favoritesService
@@ -82,6 +87,7 @@ export class FavoritesController {
   @ApiIdParams(EntityName.ALBUM)
   @Api201CreatedResponse(EntityName.ALBUM, AddedFavorite, true)
   @Api400BadRequestResponse()
+  @Api401UnauthorizedResponse()
   @Api422NotExistResponse(EntityName.ALBUM)
   async addAlbumToFavorites(@Param() { id }: IdDto): Promise<AddedFavorite> {
     return this.favoritesService
@@ -101,8 +107,9 @@ export class FavoritesController {
     description: 'This endpoint removes a album from the favorites.',
   })
   @ApiIdParams(EntityName.ALBUM)
-  @Api400BadRequestResponse()
   @Api204NoContentResponse(EntityName.ALBUM, true)
+  @Api400BadRequestResponse()
+  @Api401UnauthorizedResponse()
   @Api404NotFoundResponse(EntityName.ALBUM, true)
   async removeAlbumFromFavorites(@Param() { id }: IdDto): Promise<void> {
     return this.favoritesService
@@ -123,6 +130,7 @@ export class FavoritesController {
   @ApiIdParams(EntityName.TRACK)
   @Api201CreatedResponse(EntityName.TRACK, AddedFavorite, true)
   @Api400BadRequestResponse()
+  @Api401UnauthorizedResponse()
   @Api422NotExistResponse(EntityName.TRACK)
   async addTrackToFavorites(@Param() { id }: IdDto): Promise<AddedFavorite> {
     return this.favoritesService
@@ -142,8 +150,9 @@ export class FavoritesController {
     description: 'This endpoint removes a track from the favorites.',
   })
   @ApiIdParams(EntityName.TRACK)
-  @Api400BadRequestResponse()
   @Api204NoContentResponse(EntityName.TRACK, true)
+  @Api400BadRequestResponse()
+  @Api401UnauthorizedResponse()
   @Api404NotFoundResponse(EntityName.TRACK, true)
   async removeTrackFromFavorites(@Param() { id }: IdDto): Promise<void> {
     return this.favoritesService

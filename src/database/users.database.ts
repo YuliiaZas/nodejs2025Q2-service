@@ -21,6 +21,10 @@ export class UsersDatabase implements IUsersDatabase {
     return this.prisma.user.findUnique({ where: { id } });
   }
 
+  async getUserByLogin(login: string): Promise<User | null> {
+    return this.prisma.user.findFirst({ where: { login } });
+  }
+
   async deleteUser(id: string): Promise<boolean> {
     return this.prisma.user
       .delete({ where: { id } })

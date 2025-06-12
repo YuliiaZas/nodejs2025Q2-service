@@ -135,15 +135,26 @@ This will create a `doc/api.yaml` file containing the OpenAPI documentation.
 
 After application running open new terminal and enter:
 
-To run all tests without authorization:
+To run tests with authorization:
 - inside the Docker container:
 ```
-npm run test:docker
+npm run test:auth:docker
 ```
 
 - or from the host machine (previously you need to run `npm install` and `npm start` or `npm docker:up`):
 ```
-npm run test
+npm run test:auth
+```
+
+To run tests for token refresh:
+- inside the Docker container:
+```
+npm run test:refresh:docker
+```
+
+- or from the host machine (previously you need to run `npm install` and `npm start` or `npm docker:up`):
+```
+npm run test:refresh
 ```
 
 To run only one of all test suites

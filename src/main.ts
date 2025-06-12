@@ -3,15 +3,18 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common/pipes/validation.pipe';
 import { SwaggerModule } from '@nestjs/swagger';
 
-import { log } from '@/shared';
+import { LoggingService } from '@/shared';
 
 import { AppModule } from './app.module';
+import { GlobalExceptionFilter } from './shared/exseptions/global-exception.filter';
 import { createSwaggerDocument } from './shared/swagger/swagger.config';
 
 import 'dotenv/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.useLogger(app.get(LoggingService));
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -21,11 +24,16 @@ async function bootstrap() {
     }),
   );
 
+  app.useGlobalFilters(new GlobalExceptionFilter(app.get(LoggingService)));
+
   const document = createSwaggerDocument(app);
   SwaggerModule.setup('doc', app, document);
 
-  await app.listen(process.env.PORT || 4000);
+  const port = process.env.PORT || 4000;
 
-  log(`Application started at port ${process.env.PORT || 4000}`);
+  await app.listen(port, () => {
+    app.get(LoggingService).log(`Application started at port ${port}`);
+  });
 }
+
 bootstrap();

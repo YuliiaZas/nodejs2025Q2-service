@@ -1,11 +1,8 @@
-import { CreateUserDto } from '../dto/create-user.dto';
 import { User } from '../entities/user.entity';
+import { UsersActions } from './users-actions.interface';
 
-export interface IUsersDatabase {
-  addUser(user: CreateUserDto): Promise<User>;
-  getUsers(): Promise<User[]>;
-  getUser(id: string): Promise<User | null>;
-  deleteUser(id: string): Promise<boolean>;
+export interface IUsersDatabase extends UsersActions {
+  getUserByLogin(login: string): Promise<User | null>;
   updateUserFields(
     id: string,
     updatedFields: Partial<User>,

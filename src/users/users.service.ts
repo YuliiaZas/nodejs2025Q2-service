@@ -63,4 +63,16 @@ export class UsersService implements IUsersService {
     if (!user) return null;
     return this.passwordService.comparePasswords(user.password, password);
   }
+
+  async getUserAuthenticated(credentials: CreateUserDto): Promise<User | null> {
+    const user = await this.storage.getUserByLogin(credentials.login);
+    if (!user) return null;
+
+    const isPasswordCorrect = await this.passwordService.comparePasswords(
+      user.password,
+      credentials.password,
+    );
+
+    return isPasswordCorrect ? plainToInstance(User, user) : null;
+  }
 }

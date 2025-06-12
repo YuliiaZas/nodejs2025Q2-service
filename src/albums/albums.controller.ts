@@ -8,13 +8,14 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 
 import {
   Api200OkResponse,
   Api201CreatedResponse,
   Api204NoContentResponse,
   Api400BadRequestResponse,
+  Api401UnauthorizedResponse,
   Api404NotFoundResponse,
   Api422NotExistResponse,
   ApiIdParams,
@@ -31,6 +32,7 @@ import { Album } from './entities/album.entity';
 const ENTITY_NAME = EntityName.ALBUM;
 
 @Controller('album')
+@ApiBearerAuth('access-token')
 export class AlbumsController {
   constructor(private readonly albumsService: AlbumsService) {}
 
@@ -47,6 +49,7 @@ export class AlbumsController {
     'year must not be less than 1900',
     'year must be an integer number',
   ])
+  @Api401UnauthorizedResponse()
   @Api422NotExistResponse(EntityName.ARTIST)
   async addAlbum(@Body() createAlbumDto: CreateAlbumDto): Promise<Album> {
     return this.albumsService.add(createAlbumDto);
@@ -58,6 +61,7 @@ export class AlbumsController {
     description: 'This endpoint retrieves a list of all albums.',
   })
   @Api200OkResponse(ENTITY_NAME, [Album])
+  @Api401UnauthorizedResponse()
   async getAlbums(): Promise<Album[]> {
     return this.albumsService.getAll();
   }
@@ -70,6 +74,7 @@ export class AlbumsController {
   @ApiIdParams(ENTITY_NAME)
   @Api200OkResponse(ENTITY_NAME, Album)
   @Api400BadRequestResponse()
+  @Api401UnauthorizedResponse()
   @Api404NotFoundResponse(ENTITY_NAME)
   async getAlbum(@Param() { id }: IdDto): Promise<Album> {
     return this.albumsService.getById(id).then((album) => {
@@ -87,6 +92,7 @@ export class AlbumsController {
   @ApiIdParams(ENTITY_NAME)
   @Api200OkResponse('The user password', Album, false, true)
   @Api400BadRequestResponse()
+  @Api401UnauthorizedResponse()
   @Api404NotFoundResponse(ENTITY_NAME)
   @Api422NotExistResponse(EntityName.ARTIST)
   async updateAlbum(
@@ -108,6 +114,7 @@ export class AlbumsController {
   @ApiIdParams(ENTITY_NAME)
   @Api204NoContentResponse(ENTITY_NAME)
   @Api400BadRequestResponse()
+  @Api401UnauthorizedResponse()
   @Api404NotFoundResponse(ENTITY_NAME)
   async deleteAlbum(@Param() { id }: IdDto): Promise<void> {
     return this.albumsService.deleteById(id).then((deleted) => {

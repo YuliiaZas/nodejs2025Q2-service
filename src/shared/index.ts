@@ -22,4 +22,5 @@ export * from './types/swagger-response.type';
 export * from './utils/capitalize-first-letter';
 export * from './utils/get-not-exist-message';
 export * from './utils/get-not-found-message';
+export * from './utils/mask-sensitive-fields';
 export * from './utils/validate-music-entity-name';

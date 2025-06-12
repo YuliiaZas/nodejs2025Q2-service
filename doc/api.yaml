@@ -29,8 +29,19 @@ paths:
                     - login must be longer than or equal to 3 characters
                     - password must be longer than or equal to 4 characters
                   error: Bad Request
+        "401":
+          description: Unauthorized. The user is not authenticated or the token is invalid.
+          content:
+            application/json:
+              schema:
+                example:
+                  statusCode: 401
+                  message: Unauthorized. The user is not authenticated or the token is invalid.
+                  error: Unauthorized
+      security: &a1
+        - access-token: []
       summary: Create a new user
-      tags: &a1
+      tags: &a2
         - Users
     get:
       description: This endpoint retrieves a list of all users.
@@ -45,8 +56,18 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/User"
+        "401":
+          description: Unauthorized. The user is not authenticated or the token is invalid.
+          content:
+            application/json:
+              schema:
+                example:
+                  statusCode: 401
+                  message: Unauthorized. The user is not authenticated or the token is invalid.
+                  error: Unauthorized
+      security: *a1
       summary: Get all users
-      tags: *a1
+      tags: *a2
   /user/{id}:
     get:
       description: This endpoint retrieves a user by their ID.
@@ -76,6 +97,15 @@ paths:
                   statusCode: 400
                   message: Invalid ID format. Must be a UUID v4
                   error: Bad Request
+        "401":
+          description: Unauthorized. The user is not authenticated or the token is invalid.
+          content:
+            application/json:
+              schema:
+                example:
+                  statusCode: 401
+                  message: Unauthorized. The user is not authenticated or the token is invalid.
+                  error: Unauthorized
         "404":
           description: User not found. The user with the specified ID does not exist.
           content:
@@ -85,8 +115,9 @@ paths:
                   statusCode: 404
                   message: User with ID 123e4567-e89b-12d3-a456-426614174000 not found
                   error: Not Found
+      security: *a1
       summary: Get a user by ID
-      tags: *a1
+      tags: *a2
     put:
       description: This endpoint updates the password of an existing user. The old
         password must be provided for verification.
@@ -122,6 +153,15 @@ paths:
                   statusCode: 400
                   message: Invalid ID format. Must be a UUID v4
                   error: Bad Request
+        "401":
+          description: Unauthorized. The user is not authenticated or the token is invalid.
+          content:
+            application/json:
+              schema:
+                example:
+                  statusCode: 401
+                  message: Unauthorized. The user is not authenticated or the token is invalid.
+                  error: Unauthorized
         "403":
           description: Forbidden. The user does not have permission to perform this action.
           content:
@@ -140,8 +180,9 @@ paths:
                   statusCode: 404
                   message: User with ID 123e4567-e89b-12d3-a456-426614174000 not found
                   error: Not Found
+      security: *a1
       summary: Update user password
-      tags: *a1
+      tags: *a2
     delete:
       description: This endpoint deletes a user by their ID.
       operationId: UsersController_deleteUser
@@ -166,6 +207,15 @@ paths:
                   statusCode: 400
                   message: Invalid ID format. Must be a UUID v4
                   error: Bad Request
+        "401":
+          description: Unauthorized. The user is not authenticated or the token is invalid.
+          content:
+            application/json:
+              schema:
+                example:
+                  statusCode: 401
+                  message: Unauthorized. The user is not authenticated or the token is invalid.
+                  error: Unauthorized
         "404":
           description: User not found. The user with the specified ID does not exist.
           content:
@@ -175,8 +225,9 @@ paths:
                   statusCode: 404
                   message: User with ID 123e4567-e89b-12d3-a456-426614174000 not found
                   error: Not Found
+      security: *a1
       summary: Delete a user by ID
-      tags: *a1
+      tags: *a2
   /artist:
     post:
       description: This endpoint creates a new artist with a name and a flag if the
@@ -207,8 +258,19 @@ paths:
                     - name should not be empty
                     - grammy must be a boolean value
                   error: Bad Request
+        "401":
+          description: Unauthorized. The user is not authenticated or the token is invalid.
+          content:
+            application/json:
+              schema:
+                example:
+                  statusCode: 401
+                  message: Unauthorized. The user is not authenticated or the token is invalid.
+                  error: Unauthorized
+      security: &a3
+        - access-token: []
       summary: Create a new artist
-      tags: &a2
+      tags: &a4
         - Artists
     get:
       description: This endpoint retrieves a list of all artists.
@@ -223,8 +285,18 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Artist"
+        "401":
+          description: Unauthorized. The user is not authenticated or the token is invalid.
+          content:
+            application/json:
+              schema:
+                example:
+                  statusCode: 401
+                  message: Unauthorized. The user is not authenticated or the token is invalid.
+                  error: Unauthorized
+      security: *a3
       summary: Get all artists
-      tags: *a2
+      tags: *a4
   /artist/{id}:
     get:
       description: This endpoint retrieves an artist by their ID.
@@ -254,6 +326,15 @@ paths:
                   statusCode: 400
                   message: Invalid ID format. Must be a UUID v4
                   error: Bad Request
+        "401":
+          description: Unauthorized. The user is not authenticated or the token is invalid.
+          content:
+            application/json:
+              schema:
+                example:
+                  statusCode: 401
+                  message: Unauthorized. The user is not authenticated or the token is invalid.
+                  error: Unauthorized
         "404":
           description: Artist not found. The artist with the specified ID does not exist.
           content:
@@ -263,8 +344,9 @@ paths:
                   statusCode: 404
                   message: Artist with ID 123e4567-e89b-12d3-a456-426614174001 not found
                   error: Not Found
+      security: *a3
       summary: Get an artist by ID
-      tags: *a2
+      tags: *a4
     put:
       description: This endpoint updates an artist by their ID with new data.
       operationId: ArtistsController_updateArtist
@@ -299,6 +381,15 @@ paths:
                   statusCode: 400
                   message: Invalid ID format. Must be a UUID v4
                   error: Bad Request
+        "401":
+          description: Unauthorized. The user is not authenticated or the token is invalid.
+          content:
+            application/json:
+              schema:
+                example:
+                  statusCode: 401
+                  message: Unauthorized. The user is not authenticated or the token is invalid.
+                  error: Unauthorized
         "404":
           description: Artist not found. The artist with the specified ID does not exist.
           content:
@@ -308,8 +399,9 @@ paths:
                   statusCode: 404
                   message: Artist with ID 123e4567-e89b-12d3-a456-426614174001 not found
                   error: Not Found
+      security: *a3
       summary: Update an artist by ID
-      tags: *a2
+      tags: *a4
     delete:
       description: This endpoint deletes an artist by their ID.
       operationId: ArtistsController_deleteArtist
@@ -334,6 +426,15 @@ paths:
                   statusCode: 400
                   message: Invalid ID format. Must be a UUID v4
                   error: Bad Request
+        "401":
+          description: Unauthorized. The user is not authenticated or the token is invalid.
+          content:
+            application/json:
+              schema:
+                example:
+                  statusCode: 401
+                  message: Unauthorized. The user is not authenticated or the token is invalid.
+                  error: Unauthorized
         "404":
           description: Artist not found. The artist with the specified ID does not exist.
           content:
@@ -343,8 +444,9 @@ paths:
                   statusCode: 404
                   message: Artist with ID 123e4567-e89b-12d3-a456-426614174001 not found
                   error: Not Found
+      security: *a3
       summary: Delete an artist by ID
-      tags: *a2
+      tags: *a4
   /album:
     post:
       description: This endpoint creates a new album with a name, year, and an
@@ -377,6 +479,15 @@ paths:
                     - year must not be less than 1900
                     - year must be an integer number
                   error: Bad Request
+        "401":
+          description: Unauthorized. The user is not authenticated or the token is invalid.
+          content:
+            application/json:
+              schema:
+                example:
+                  statusCode: 401
+                  message: Unauthorized. The user is not authenticated or the token is invalid.
+                  error: Unauthorized
         "422":
           description: Artist not exist. The artist with the specified ID does not exist.
           content:
@@ -386,8 +497,10 @@ paths:
                   statusCode: 422
                   message: Artist with ID 123e4567-e89b-12d3-a456-426614174001 does not exist
                   error: Not Found
+      security: &a5
+        - access-token: []
       summary: Create a new album
-      tags: &a3
+      tags: &a6
         - Albums
     get:
       description: This endpoint retrieves a list of all albums.
@@ -402,8 +515,18 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Album"
+        "401":
+          description: Unauthorized. The user is not authenticated or the token is invalid.
+          content:
+            application/json:
+              schema:
+                example:
+                  statusCode: 401
+                  message: Unauthorized. The user is not authenticated or the token is invalid.
+                  error: Unauthorized
+      security: *a5
       summary: Get all albums
-      tags: *a3
+      tags: *a6
   /album/{id}:
     get:
       description: This endpoint retrieves an album by its ID.
@@ -433,6 +556,15 @@ paths:
                   statusCode: 400
                   message: Invalid ID format. Must be a UUID v4
                   error: Bad Request
+        "401":
+          description: Unauthorized. The user is not authenticated or the token is invalid.
+          content:
+            application/json:
+              schema:
+                example:
+                  statusCode: 401
+                  message: Unauthorized. The user is not authenticated or the token is invalid.
+                  error: Unauthorized
         "404":
           description: Album not found. The album with the specified ID does not exist.
           content:
@@ -442,8 +574,9 @@ paths:
                   statusCode: 404
                   message: Album with ID 123e4567-e89b-12d3-a456-426614174002 not found
                   error: Not Found
+      security: *a5
       summary: Get an album by ID
-      tags: *a3
+      tags: *a6
     put:
       description: This endpoint updates an existing album by its ID with new data.
       operationId: AlbumsController_updateAlbum
@@ -478,6 +611,15 @@ paths:
                   statusCode: 400
                   message: Invalid ID format. Must be a UUID v4
                   error: Bad Request
+        "401":
+          description: Unauthorized. The user is not authenticated or the token is invalid.
+          content:
+            application/json:
+              schema:
+                example:
+                  statusCode: 401
+                  message: Unauthorized. The user is not authenticated or the token is invalid.
+                  error: Unauthorized
         "404":
           description: Album not found. The album with the specified ID does not exist.
           content:
@@ -496,8 +638,9 @@ paths:
                   statusCode: 422
                   message: Artist with ID 123e4567-e89b-12d3-a456-426614174001 does not exist
                   error: Not Found
+      security: *a5
       summary: Update an album by ID
-      tags: *a3
+      tags: *a6
     delete:
       description: This endpoint deletes an album by its ID.
       operationId: AlbumsController_deleteAlbum
@@ -522,6 +665,15 @@ paths:
                   statusCode: 400
                   message: Invalid ID format. Must be a UUID v4
                   error: Bad Request
+        "401":
+          description: Unauthorized. The user is not authenticated or the token is invalid.
+          content:
+            application/json:
+              schema:
+                example:
+                  statusCode: 401
+                  message: Unauthorized. The user is not authenticated or the token is invalid.
+                  error: Unauthorized
         "404":
           description: Album not found. The album with the specified ID does not exist.
           content:
@@ -531,8 +683,9 @@ paths:
                   statusCode: 404
                   message: Album with ID 123e4567-e89b-12d3-a456-426614174002 not found
                   error: Not Found
+      security: *a5
       summary: Delete an album by ID
-      tags: *a3
+      tags: *a6
   /track:
     post:
       description: This endpoint creates a new track with a name, year, and an
@@ -565,6 +718,15 @@ paths:
                     - year must not be less than 1900
                     - year must be an integer number
                   error: Bad Request
+        "401":
+          description: Unauthorized. The user is not authenticated or the token is invalid.
+          content:
+            application/json:
+              schema:
+                example:
+                  statusCode: 401
+                  message: Unauthorized. The user is not authenticated or the token is invalid.
+                  error: Unauthorized
         "422":
           description: Artist or album not exist. The artist or album with the specified
             ID does not exist.
@@ -575,8 +737,10 @@ paths:
                   statusCode: 422
                   message: Artist with ID 123e4567-e89b-12d3-a456-426614174001 does not exist
                   error: Not Found
+      security: &a7
+        - access-token: []
       summary: Create a new track
-      tags: &a4
+      tags: &a8
         - Tracks
     get:
       description: This endpoint retrieves a list of all tracks.
@@ -591,8 +755,18 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Track"
+        "401":
+          description: Unauthorized. The user is not authenticated or the token is invalid.
+          content:
+            application/json:
+              schema:
+                example:
+                  statusCode: 401
+                  message: Unauthorized. The user is not authenticated or the token is invalid.
+                  error: Unauthorized
+      security: *a7
       summary: Get all tracks
-      tags: *a4
+      tags: *a8
   /track/{id}:
     get:
       description: This endpoint retrieves an track by its ID.
@@ -622,6 +796,15 @@ paths:
                   statusCode: 400
                   message: Invalid ID format. Must be a UUID v4
                   error: Bad Request
+        "401":
+          description: Unauthorized. The user is not authenticated or the token is invalid.
+          content:
+            application/json:
+              schema:
+                example:
+                  statusCode: 401
+                  message: Unauthorized. The user is not authenticated or the token is invalid.
+                  error: Unauthorized
         "404":
           description: Track not found. The track with the specified ID does not exist.
           content:
@@ -631,8 +814,9 @@ paths:
                   statusCode: 404
                   message: Track with ID 123e4567-e89b-12d3-a456-426614174003 not found
                   error: Not Found
+      security: *a7
       summary: Get an track by ID
-      tags: *a4
+      tags: *a8
     put:
       description: This endpoint updates an existing track by its ID with new data.
       operationId: TracksController_updateTrack
@@ -667,6 +851,15 @@ paths:
                   statusCode: 400
                   message: Invalid ID format. Must be a UUID v4
                   error: Bad Request
+        "401":
+          description: Unauthorized. The user is not authenticated or the token is invalid.
+          content:
+            application/json:
+              schema:
+                example:
+                  statusCode: 401
+                  message: Unauthorized. The user is not authenticated or the token is invalid.
+                  error: Unauthorized
         "404":
           description: Track not found. The track with the specified ID does not exist.
           content:
@@ -686,8 +879,9 @@ paths:
                   statusCode: 422
                   message: Artist with ID 123e4567-e89b-12d3-a456-426614174001 does not exist
                   error: Not Found
+      security: *a7
       summary: Update an track by ID
-      tags: *a4
+      tags: *a8
     delete:
       description: This endpoint deletes an track by its ID.
       operationId: TracksController_deleteTrack
@@ -712,6 +906,15 @@ paths:
                   statusCode: 400
                   message: Invalid ID format. Must be a UUID v4
                   error: Bad Request
+        "401":
+          description: Unauthorized. The user is not authenticated or the token is invalid.
+          content:
+            application/json:
+              schema:
+                example:
+                  statusCode: 401
+                  message: Unauthorized. The user is not authenticated or the token is invalid.
+                  error: Unauthorized
         "404":
           description: Track not found. The track with the specified ID does not exist.
           content:
@@ -721,8 +924,9 @@ paths:
                   statusCode: 404
                   message: Track with ID 123e4567-e89b-12d3-a456-426614174003 not found
                   error: Not Found
+      security: *a7
       summary: Delete an track by ID
-      tags: *a4
+      tags: *a8
   /favs:
     get:
       description: This endpoint retrieves all the favorites.
@@ -735,8 +939,19 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Favorites"
+        "401":
+          description: Unauthorized. The user is not authenticated or the token is invalid.
+          content:
+            application/json:
+              schema:
+                example:
+                  statusCode: 401
+                  message: Unauthorized. The user is not authenticated or the token is invalid.
+                  error: Unauthorized
+      security: &a9
+        - access-token: []
       summary: Get all favorites
-      tags: &a5
+      tags: &a10
         - Favorites
   /favs/artist/{id}:
     post:
@@ -767,6 +982,15 @@ paths:
                   statusCode: 400
                   message: Invalid ID format. Must be a UUID v4
                   error: Bad Request
+        "401":
+          description: Unauthorized. The user is not authenticated or the token is invalid.
+          content:
+            application/json:
+              schema:
+                example:
+                  statusCode: 401
+                  message: Unauthorized. The user is not authenticated or the token is invalid.
+                  error: Unauthorized
         "422":
           description: Artist not exist. The artist with the specified ID does not exist.
           content:
@@ -776,8 +1000,9 @@ paths:
                   statusCode: 422
                   message: Artist with ID 123e4567-e89b-12d3-a456-426614174001 does not exist
                   error: Not Found
+      security: *a9
       summary: Add a artist to favorites
-      tags: *a5
+      tags: *a10
     delete:
       description: This endpoint removes a artist from the favorites.
       operationId: FavoritesController_removeArtistFromFavorites
@@ -802,6 +1027,15 @@ paths:
                   statusCode: 400
                   message: Invalid ID format. Must be a UUID v4
                   error: Bad Request
+        "401":
+          description: Unauthorized. The user is not authenticated or the token is invalid.
+          content:
+            application/json:
+              schema:
+                example:
+                  statusCode: 401
+                  message: Unauthorized. The user is not authenticated or the token is invalid.
+                  error: Unauthorized
         "404":
           description: Artist not found in favorites. The artist with the specified ID
             does not exist in favorites.
@@ -813,8 +1047,9 @@ paths:
                   message: Artist with ID 123e4567-e89b-12d3-a456-426614174001 not found in
                     favorites
                   error: Not Found
+      security: *a9
       summary: Remove a artist from favorites
-      tags: *a5
+      tags: *a10
   /favs/album/{id}:
     post:
       description: This endpoint adds a album to the favorites.
@@ -844,6 +1079,15 @@ paths:
                   statusCode: 400
                   message: Invalid ID format. Must be a UUID v4
                   error: Bad Request
+        "401":
+          description: Unauthorized. The user is not authenticated or the token is invalid.
+          content:
+            application/json:
+              schema:
+                example:
+                  statusCode: 401
+                  message: Unauthorized. The user is not authenticated or the token is invalid.
+                  error: Unauthorized
         "422":
           description: Album not exist. The album with the specified ID does not exist.
           content:
@@ -853,8 +1097,9 @@ paths:
                   statusCode: 422
                   message: Album with ID 123e4567-e89b-12d3-a456-426614174002 does not exist
                   error: Not Found
+      security: *a9
       summary: Add a album to favorites
-      tags: *a5
+      tags: *a10
     delete:
       description: This endpoint removes a album from the favorites.
       operationId: FavoritesController_removeAlbumFromFavorites
@@ -879,6 +1124,15 @@ paths:
                   statusCode: 400
                   message: Invalid ID format. Must be a UUID v4
                   error: Bad Request
+        "401":
+          description: Unauthorized. The user is not authenticated or the token is invalid.
+          content:
+            application/json:
+              schema:
+                example:
+                  statusCode: 401
+                  message: Unauthorized. The user is not authenticated or the token is invalid.
+                  error: Unauthorized
         "404":
           description: Album not found in favorites. The album with the specified ID does
             not exist in favorites.
@@ -890,8 +1144,9 @@ paths:
                   message: Album with ID 123e4567-e89b-12d3-a456-426614174002 not found in
                     favorites
                   error: Not Found
+      security: *a9
       summary: Remove a album from favorites
-      tags: *a5
+      tags: *a10
   /favs/track/{id}:
     post:
       description: This endpoint adds a track to the favorites.
@@ -921,6 +1176,15 @@ paths:
                   statusCode: 400
                   message: Invalid ID format. Must be a UUID v4
                   error: Bad Request
+        "401":
+          description: Unauthorized. The user is not authenticated or the token is invalid.
+          content:
+            application/json:
+              schema:
+                example:
+                  statusCode: 401
+                  message: Unauthorized. The user is not authenticated or the token is invalid.
+                  error: Unauthorized
         "422":
           description: Track not exist. The track with the specified ID does not exist.
           content:
@@ -930,8 +1194,9 @@ paths:
                   statusCode: 422
                   message: Track with ID 123e4567-e89b-12d3-a456-426614174003 does not exist
                   error: Not Found
+      security: *a9
       summary: Add a track to favorites
-      tags: *a5
+      tags: *a10
     delete:
       description: This endpoint removes a track from the favorites.
       operationId: FavoritesController_removeTrackFromFavorites
@@ -956,6 +1221,15 @@ paths:
                   statusCode: 400
                   message: Invalid ID format. Must be a UUID v4
                   error: Bad Request
+        "401":
+          description: Unauthorized. The user is not authenticated or the token is invalid.
+          content:
+            application/json:
+              schema:
+                example:
+                  statusCode: 401
+                  message: Unauthorized. The user is not authenticated or the token is invalid.
+                  error: Unauthorized
         "404":
           description: Track not found in favorites. The track with the specified ID does
             not exist in favorites.
@@ -967,8 +1241,121 @@ paths:
                   message: Track with ID 123e4567-e89b-12d3-a456-426614174003 not found in
                     favorites
                   error: Not Found
+      security: *a9
       summary: Remove a track from favorites
-      tags: *a5
+      tags: *a10
+  /auth/signup:
+    post:
+      description: This endpoint allows a new user to sign up with a login and password.
+      operationId: AuthController_signup
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserDto"
+      responses:
+        "201":
+          description: The user has been successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          description: Bad Request. The input data is invalid.
+          content:
+            application/json:
+              schema:
+                example:
+                  statusCode: 400
+                  message:
+                    - login must be longer than or equal to 3 characters
+                    - password must be longer than or equal to 4 characters
+                  error: Bad Request
+      summary: Sign up a new user
+      tags: &a11
+        - Auth
+  /auth/login:
+    post:
+      description: This endpoint allows an existing user to log in with their login
+        and password.
+      operationId: AuthController_login
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserDto"
+      responses:
+        "200":
+          description: Tokens has been successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "400":
+          description: Bad Request. The input data is invalid.
+          content:
+            application/json:
+              schema:
+                example:
+                  statusCode: 400
+                  message:
+                    - login must be longer than or equal to 3 characters
+                    - password must be longer than or equal to 4 characters
+                  error: Bad Request
+        "403":
+          description: Forbidden. The user does not have permission to perform this action.
+          content:
+            application/json:
+              schema:
+                example:
+                  statusCode: 403
+                  message: Login or password is incorrect
+                  error: Forbidden
+      summary: Log in an existing user
+      tags: *a11
+  /auth/refresh:
+    post:
+      description: This endpoint allows a user to refresh their session using a
+        refresh token.
+      operationId: AuthController_refresh
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RefreshDto"
+      responses:
+        "200":
+          description: Tokens has been successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "401":
+          description: Refresh token not provided
+          content:
+            application/json:
+              schema:
+                example:
+                  statusCode: 401
+                  message: Refresh token not provided
+                  error: Unauthorized
+        "403":
+          description: Forbidden. The user does not have permission to perform this action.
+          content:
+            application/json:
+              schema:
+                example:
+                  statusCode: 403
+                  message: Refresh token is invalid or expired
+                  error: Forbidden
+      summary: Refresh user session
+      tags: *a11
 info:
   title: Home Library Service
   description: API for managing music albums, artists, and tracks
@@ -977,6 +1364,14 @@ info:
 tags: []
 servers: []
 components:
+  securitySchemes:
+    access-token:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+      name: Authorization
+      description: Enter JWT access token
+      in: header
   schemas:
     CreateUserDto:
       type: object
@@ -1010,10 +1405,12 @@ components:
           type: number
           example: 1
         createdAt:
-          type: number
+          format: int64
+          type: integer
           example: 1716927665136
         updatedAt:
-          type: number
+          format: int64
+          type: integer
           example: 1716927665136
     UpdatePasswordDto:
       type: object
@@ -1226,3 +1623,26 @@ components:
             - track
           example: artist
           description: The type of the added favorite entity
+    AuthResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          format: token
+          description: JWT access token for authenticated requests
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        refreshToken:
+          type: string
+          format: token
+          description: JWT refresh token for obtaining new access tokens
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+    RefreshDto:
+      type: object
+      properties:
+        refreshToken:
+          type: string
+          description: JWT refresh token for obtaining new access tokens
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+          format: token
+      required:
+        - refreshToken

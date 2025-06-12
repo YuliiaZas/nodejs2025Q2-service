@@ -8,13 +8,14 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 
 import {
   Api200OkResponse,
   Api201CreatedResponse,
   Api204NoContentResponse,
   Api400BadRequestResponse,
+  Api401UnauthorizedResponse,
   Api404NotFoundResponse,
   Api422NotExistResponse,
   ApiIdParams,
@@ -31,6 +32,7 @@ import { TracksService } from './tracks.service';
 const ENTITY_NAME = EntityName.TRACK;
 
 @Controller('track')
+@ApiBearerAuth('access-token')
 export class TracksController {
   constructor(private readonly tracksService: TracksService) {}
 
@@ -47,6 +49,7 @@ export class TracksController {
     'year must not be less than 1900',
     'year must be an integer number',
   ])
+  @Api401UnauthorizedResponse()
   @Api422NotExistResponse(EntityName.ARTIST, EntityName.ALBUM)
   async addTrack(@Body() createTrackDto: CreateTrackDto): Promise<Track> {
     return this.tracksService.add(createTrackDto);
@@ -58,6 +61,7 @@ export class TracksController {
     description: 'This endpoint retrieves a list of all tracks.',
   })
   @Api200OkResponse(ENTITY_NAME, [Track])
+  @Api401UnauthorizedResponse()
   async getTracks(): Promise<Track[]> {
     return this.tracksService.getAll();
   }
@@ -70,6 +74,7 @@ export class TracksController {
   @ApiIdParams(ENTITY_NAME)
   @Api200OkResponse(ENTITY_NAME, Track)
   @Api400BadRequestResponse()
+  @Api401UnauthorizedResponse()
   @Api404NotFoundResponse(ENTITY_NAME)
   async getTrack(@Param() { id }: IdDto): Promise<Track> {
     return this.tracksService.getById(id).then((track) => {
@@ -87,6 +92,7 @@ export class TracksController {
   @ApiIdParams(ENTITY_NAME)
   @Api200OkResponse('The user password', Track, false, true)
   @Api400BadRequestResponse()
+  @Api401UnauthorizedResponse()
   @Api404NotFoundResponse(ENTITY_NAME)
   @Api422NotExistResponse(EntityName.ARTIST, EntityName.ALBUM)
   async updateTrack(
@@ -108,6 +114,7 @@ export class TracksController {
   @ApiIdParams(ENTITY_NAME)
   @Api204NoContentResponse(ENTITY_NAME)
   @Api400BadRequestResponse()
+  @Api401UnauthorizedResponse()
   @Api404NotFoundResponse(ENTITY_NAME)
   async deleteTrack(@Param() { id }: IdDto): Promise<void> {
     return this.tracksService.deleteById(id).then((deleted) => {
