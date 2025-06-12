@@ -4,10 +4,12 @@ import {
   Controller,
   ForbiddenException,
   Post,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
+import { Public } from '@/auth-guard';
 import {
   Api200OkResponse,
   Api201CreatedResponse,
@@ -19,7 +21,9 @@ import {
 import { CreateUserDto, User } from '@/users';
 
 import { AuthService } from './auth.service';
+import { AuthRefreshGuard } from './auth-refresh.guard';
 import { RefreshDto } from './dto/refresh.dto';
+import { GetCurrentUserId } from './get-current-user-id.decorator';
 import { AuthResponse } from './interfaces/auth-response.interface';
 
 const ENTITY_NAME = EntityName.USER;
@@ -31,6 +35,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('signup')
+  @Public()
   @ApiOperation({
     summary: 'Sign up a new user',
     description:
@@ -46,6 +51,7 @@ export class AuthController {
   }
 
   @Post('login')
+  @Public()
   @ApiOperation({
     summary: 'Log in an existing user',
     description:
@@ -65,6 +71,7 @@ export class AuthController {
   }
 
   @Post('refresh')
+  @UseGuards(AuthRefreshGuard)
   @ApiOperation({
     summary: 'Refresh user session',
     description:
@@ -74,8 +81,11 @@ export class AuthController {
   @Api400BadRequestResponse(['refreshToken must be a jwt string'])
   @Api401UnauthorizedResponse('Refresh token is required')
   @Api403ForbiddenResponse('Refresh token is invalid or expired')
-  async refresh(@Body() refreshDto: RefreshDto): Promise<AuthResponse | null> {
-    return this.authService.refresh(refreshDto).then((res) => {
+  async refresh(
+    @Body() refreshDto: RefreshDto,
+    @GetCurrentUserId() id: string,
+  ): Promise<AuthResponse | null> {
+    return this.authService.refresh(id).then((res) => {
       if (!res)
         throw new ForbiddenException('Refresh token is invalid or expired');
       return res;

@@ -5,6 +5,7 @@ import { CreateUserDto, User } from '@/users';
 import { UsersService } from '@/users/users.service';
 
 import { AuthResponse } from './interfaces/auth-response.interface';
+import { JwtPayload } from './interfaces/jwt-payload.type';
 
 @Injectable()
 export class AuthService {
@@ -26,30 +27,18 @@ export class AuthService {
     return this.getTokens(user);
   }
 
-  async refresh(refreshDto: {
-    refreshToken: string;
-  }): Promise<AuthResponse | null> {
-    try {
-      const payload = await this.jwtService.verifyAsync(
-        refreshDto.refreshToken,
-        {
-          secret: process.env.JWT_SECRET_REFRESH_KEY,
-        },
-      );
-
-      const user = await this.usersService.getUser(payload.id);
-      if (!user) {
-        return null;
-      }
-
-      return this.getTokens(user);
-    } catch (error) {
+  async refresh(id: string): Promise<AuthResponse | null> {
+    const user = await this.usersService.getUser(id);
+    if (!user) {
       return null;
     }
+
+    return this.getTokens(user);
   }
 
   private async getTokens(user: User): Promise<AuthResponse> {
-    const payload = {
+    const payload: JwtPayload = {
+      sub: user.id,
       userId: user.id,
       login: user.login,
     };

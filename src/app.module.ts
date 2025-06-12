@@ -1,4 +1,4 @@
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 
 import {
   ClassSerializerInterceptor,
@@ -14,6 +14,8 @@ import { AlbumsModule } from './albums/albums.module';
 import { AppService } from './app.service';
 import { ArtistsModule } from './artists/artists.module';
 import { AuthModule } from './auth/auth.module';
+import { AuthGuard } from './auth-guard/auth.guard';
+import { AuthGuardModule } from './auth-guard/auth-guard.module';
 import { FavoritesModule } from './favorites/favorites.module';
 import { TracksModule } from './tracks/tracks.module';
 import { UsersModule } from './users/users.module';
@@ -28,12 +30,17 @@ import { UsersModule } from './users/users.module';
     TracksModule,
     FavoritesModule,
     AuthModule,
+    AuthGuardModule,
   ],
   providers: [
     AppService,
     {
       provide: APP_INTERCEPTOR,
       useClass: ClassSerializerInterceptor,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
     },
   ],
 })
